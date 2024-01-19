@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import { getSession } from "next-auth/react";
 import { Form } from "@unform/web";
-import { Calendar, Suitcase, UsersThree } from "phosphor-react";
+import { Suitcase, UsersThree } from "phosphor-react";
 import * as Yup from "yup";
 
 // Components
@@ -25,7 +25,6 @@ export default function Register() {
 
       const userSchema = Yup.object().shape({
         name: Yup.string().required(),
-        age: Yup.number().required().positive().integer(),
         role: Yup.string().required(),
       });
 
@@ -64,15 +63,6 @@ export default function Register() {
           error={errors?.name}
         >
           <Input name="name" placeholder="Nome Completo" />
-        </InputGroup>
-
-        <InputGroup
-          label="Idade"
-          hideLabel
-          leftIcon={Calendar}
-          error={errors?.age}
-        >
-          <Input name="age" placeholder="Idade" type="number" />
         </InputGroup>
 
         <InputGroup
