@@ -26,7 +26,6 @@ export default function Home({ data: user }) {
   const [isLoading, setLoading] = useState(true);
   const [clocks, setClocks] = useState([]);
   const [toggleClock, setToggleClock] = useState(statusClock);
-  const [isToastOpen, setToastOpen] = useState(false);
 
   const handleClockAction = useCallback(async () => {
     try {
@@ -44,7 +43,7 @@ export default function Home({ data: user }) {
 
   const handleClockDelete = useCallback(
     async (index) => {
-      setToastOpen(true);
+      // setToastOpen(true);
 
       setTimeOutInterval.current = setTimeout(async () => {
         const deletedClock = clocks[index];
@@ -62,7 +61,7 @@ export default function Home({ data: user }) {
         }
       }, 5000);
 
-      setToastOpen(false);
+      // setToastOpen(false);
     },
     [clocks]
   );
