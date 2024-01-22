@@ -1,9 +1,11 @@
 import axios from "axios";
 
-import { API_DISCORD_URL } from "@/config/app";
+import { API_DISCORD_URL, API } from "@/config/app";
 
-const api = axios.create({
-  baseURL: API_DISCORD_URL,
+export const api = axios.create({
+  baseURL: API,
 });
 
-export default api;
+export const discordApi = axios.create({
+  baseURL: API_DISCORD_URL,
+});

@@ -1,7 +1,9 @@
 import React from "react";
 
 function Button({ className, children, ...rest }) {
-  const classList = ["flex items-center justify-center rounded text-white"];
+  const classList = [
+    "flex items-center justify-center rounded text-white shadow",
+  ];
 
   if (className) {
     classList.push(className);

@@ -20,7 +20,7 @@ export default function Login() {
       </Head>
 
       <div>
-        <Image src={Logo} alt="DPSKT" className="mx-auto" />
+        <Image src={Logo} alt="DPSKT" className="mx-auto" priority />
 
         <p className="text-neutral-600 text-center mt-5 mb-5">
           Faça login para abrir seu ponto!

@@ -1,60 +1,162 @@
-import React, { useState } from "react";
-import Image from "next/image";
+/* eslint-disable function-paren-newline */
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getSession } from "next-auth/react";
+import * as Tabs from "@radix-ui/react-tabs";
+
+// Services
+import { getUser } from "@/services/user";
+import {
+  getAllClocksByID,
+  clockIn,
+  clockOut,
+  deleteClock,
+} from "@/services/clock";
 
 // Components
 import Page from "@/components/Page";
-
-// Resources
-import Logo from "@/resources/logo.png";
 import Button from "@/components/Button";
-import { Clipboard } from "phosphor-react";
+import PlayerCard from "@/components/Home/PlayerCard";
+import PlayersTable from "@/components/Home/Admin/PlayersTable";
+import ClockCardList from "@/components/Home/ClockCardList";
 
-export default function Home() {
-  const [toogleClock, setToggleClock] = useState(false);
-  const iconClassName = ["w-2 h-2 rounded-full my-auto mr-2"];
+export default function Home({ data: user }) {
+  const setTimeOutInterval = useRef(null);
+  const { name, isAdmin, id, statusClock } = user.player;
 
-  if (toogleClock) {
-    iconClassName.push("bg-[#2D8F60]");
-  } else {
-    iconClassName.push("bg-[#A12525]");
-  }
+  const [isLoading, setLoading] = useState(true);
+  const [clocks, setClocks] = useState([]);
+  const [toggleClock, setToggleClock] = useState(statusClock);
+  const [isToastOpen, setToastOpen] = useState(false);
+
+  const handleClockAction = useCallback(async () => {
+    try {
+      if (toggleClock) {
+        await clockOut(id);
+      } else {
+        await clockIn(user._id);
+      }
+
+      setToggleClock((prevState) => !prevState);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [id, toggleClock, user]);
+
+  const handleClockDelete = useCallback(
+    async (index) => {
+      setToastOpen(true);
+
+      setTimeOutInterval.current = setTimeout(async () => {
+        const deletedClock = clocks[index];
+
+        try {
+          await deleteClock(deletedClock._id);
+
+          setClocks((prevState) =>
+            prevState.filter((_, itemIndex) => itemIndex !== index)
+          );
+        } catch (err) {
+          console.log(err);
+          clearTimeout(setTimeOutInterval.current);
+          setTimeOutInterval.current = null;
+        }
+      }, 5000);
+
+      setToastOpen(false);
+    },
+    [clocks]
+  );
+
+  const handleUndoClockDelete = useCallback(() => {}, []);
+
+  useEffect(() => {
+    async function getAllClocks() {
+      try {
+        const { data } = await getAllClocksByID({ id });
+
+        setClocks(data);
+      } catch (err) {
+        setClocks([]);
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (id) getAllClocks();
+  }, [id, toggleClock]);
+
+  const tabClassName =
+    "p-3 w-60 data-[state=active]:border-[#6550b9] data-[state=active]:border-b";
 
   return (
     <Page pageTitle="Home">
-      <div className="bg-[#202024] w-full rounded p-8 flex gap-16 border-2 border-[#29292E]">
-        <Image src={Logo} width={120} />
+      <div className="flex justify-between align-center mb-8">
+        <h2 className="font-normal text-2xl">
+          Olá,
+          <span className="font-bold ml-2">{name}</span>
+        </h2>
 
-        <div className="flex flex-col text-center justify-center">
-          <span className="font-bold">Recruta</span>
-          Lara Zaitsev
-        </div>
-
-        <Button
-          className="bg-[#121214] font-medium py-2 px-12 h-12 my-auto"
-          onClick={() => setToggleClock((prevState) => !prevState)}
-        >
-          <Clipboard size={20} className="mr-2" />
-          {toogleClock ? "FECHAR PONTO" : "ABRIR PONTO"}
+        <Button className="border-[#6550b9] border font-medium px-6 h-12 transition-transform hover:scale-105">
+          Comunicar problema
         </Button>
-
-        <div className="flex self-center align-center justify-end flex-1">
-          <div className={iconClassName.join(" ")} />
-          {toogleClock ? "Em serviço" : "Fora de serviço"}
-        </div>
       </div>
 
-      <h2 className="text-2xl mt-16">Histórico de pontos</h2>
+      <PlayerCard
+        user={user}
+        toggleClock={toggleClock}
+        handleClockAction={handleClockAction}
+      />
 
-      <p className="text-neutral-500 mt-4">Nenhum registro encontrado</p>
+      <Tabs.Root
+        className="flex flex-col min-w-fit mt-8"
+        defaultValue="history"
+      >
+        <Tabs.List className="shrink-0 flex border-b border-[#2B2D42] text-lg">
+          <Tabs.Trigger value="history" className={tabClassName}>
+            Histórico de Pontos
+          </Tabs.Trigger>
+
+          {isAdmin && (
+            <>
+              <Tabs.Trigger value="manage" className={tabClassName}>
+                Gerenciar Players
+              </Tabs.Trigger>
+
+              <Tabs.Trigger value="teste" className={tabClassName}>
+                Gerenciar Pontos
+              </Tabs.Trigger>
+
+              <Tabs.Trigger value="alo" className={tabClassName}>
+                Criar Notificação
+              </Tabs.Trigger>
+            </>
+          )}
+        </Tabs.List>
+
+        <Tabs.Content
+          value="history"
+          className="relative py-8 grid grid-cols-2 gap-4 outline-none"
+        >
+          <ClockCardList
+            clocks={clocks}
+            isLoading={isLoading}
+            handleClockDelete={handleClockDelete}
+            handleUndoClockDelete={handleUndoClockDelete}
+            isToastOpen
+          />
+        </Tabs.Content>
+
+        <Tabs.Content value="manage" className="relative outline-none">
+          <PlayersTable />
+        </Tabs.Content>
+      </Tabs.Root>
     </Page>
   );
 }
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
-  const id = process.env.DISCORD_WEBHOOK_ID;
-  const token = process.env.DISCORD_WEBHOOK_TOKEN;
 
   if (!session) {
     return {
@@ -65,11 +167,24 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  return {
-    props: {
-      session,
-      id,
-      token,
-    },
-  };
+  try {
+    const { data } = await getUser(session.user.id);
+
+    return {
+      props: {
+        session,
+        data,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: "/register",
+        permanent: false,
+      },
+      props: {
+        session,
+      },
+    };
+  }
 };
