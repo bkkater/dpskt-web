@@ -36,7 +36,11 @@ function PlayerFields({ title, description, errors }) {
         label="corporation"
         hideLabel
       >
-        <Select options={CORPORATION_OPTIONS} name="corporation" />
+        <Select
+          options={CORPORATION_OPTIONS}
+          name="corporation"
+          placeholder="Corporação"
+        />
       </InputGroup>
 
       <InputGroup
@@ -46,7 +50,7 @@ function PlayerFields({ title, description, errors }) {
         label="Patente"
         hideLabel
       >
-        <Select options={ROLE_OPTIONS} name="role" />
+        <Select options={ROLE_OPTIONS} name="role" placeholder="Patente" />
       </InputGroup>
     </>
   );

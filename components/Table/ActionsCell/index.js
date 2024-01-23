@@ -5,13 +5,12 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 // Services
 import { updateUser, deleteUser } from "@/services/user";
 
-
-// Components
-import Button from "@/components/Button";
+// Config
 import { ROLE_OPTIONS } from "@/config/general";
 
-function ActionsCell({ row }) {
-  const user = row.original;
+function ActionsCell({ row, table }) {
+  const selectedUser = row.original;
+  const currentUser = table.getState().user;
 
   const currentRole = row.original.player.role;
   const currentRoleIndex = ROLE_OPTIONS.findIndex(
@@ -21,83 +20,86 @@ function ActionsCell({ row }) {
   const handleRankUp = useCallback(async () => {
     try {
       await updateUser({
-        ...user,
+        ...selectedUser,
         player: {
-          ...user.player,
+          ...selectedUser.player,
           role: ROLE_OPTIONS[currentRoleIndex + 1].label,
         },
       });
     } catch (err) {
       console.log(err);
     }
-  }, [currentRoleIndex, user]);
-
+  }, [currentRoleIndex, selectedUser]);
 
   const handleRankDown = useCallback(async () => {
     try {
       await updateUser({
-        ...user,
+        ...selectedUser,
         player: {
-          ...user.player,
+          ...selectedUser.player,
           role: ROLE_OPTIONS[currentRoleIndex - 1].label,
         },
       });
     } catch (err) {
       console.log(err);
     }
-  }, [currentRoleIndex, user]);
+  }, [currentRoleIndex, selectedUser]);
 
-  const handleExonerate = useCallback(async()=>{
-    try{
-      await deleteUser(user.player.id)
+  const handleExonerate = useCallback(async () => {
+    try {
+      await deleteUser(selectedUser.player.id);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  },[]);
+  }, [selectedUser.player.id]);
 
   return (
     <Tooltip.Provider delayDuration={300}>
-      <div className="flex justify-between">
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <Button
+      <div className="grid grid-cols-4">
+        {currentRoleIndex !== ROLE_OPTIONS.length - 1 ? (
+          <Tooltip.Root>
+            <Tooltip.Trigger
               onClick={handleRankUp}
-              disabled={currentRoleIndex === ROLE_OPTIONS.length - 1}
+              className="flex align-center justify-center"
             >
-              <ArrowUp size={20} color="green"/>
-            </Button>
-          </Tooltip.Trigger>
+              <ArrowUp size={20} color="#2D8F60" />
+            </Tooltip.Trigger>
 
-          <Tooltip.Content
-            className="rounded p-2 bg-[#202024] shadow text-neutral-300"
-            sideOffset={5}
-          >
-            Upar patente
-            <Tooltip.Arrow className="fill-[#202024]" />
-          </Tooltip.Content>
-        </Tooltip.Root>
+            <Tooltip.Content
+              className="rounded p-2 bg-[#202024] shadow text-neutral-300"
+              sideOffset={5}
+            >
+              Upar patente
+              <Tooltip.Arrow className="fill-[#202024]" />
+            </Tooltip.Content>
+          </Tooltip.Root>
+        ) : (
+          <ArrowUp size={20} className="mx-auto" color="#737373" />
+        )}
 
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <Button
+        {currentRoleIndex !== 0 ? (
+          <Tooltip.Root>
+            <Tooltip.Trigger
               onClick={handleRankDown}
-              disabled={currentRoleIndex === 0}
+              className="flex align-center justify-center col-start-2"
             >
-              <ArrowDown size={20} color="red"/>
-            </Button>
-          </Tooltip.Trigger>
+              <ArrowDown size={20} color="#A12525" />
+            </Tooltip.Trigger>
 
-          <Tooltip.Content
-            className="rounded p-2 bg-[#202024] shadow text-neutral-300"
-            sideOffset={5}
-          >
-            Rebaixar patente
-            <Tooltip.Arrow className="fill-[#202024]" />
-          </Tooltip.Content>
-        </Tooltip.Root>
+            <Tooltip.Content
+              className="rounded p-2 bg-[#202024] shadow text-neutral-300"
+              sideOffset={5}
+            >
+              Rebaixar patente
+              <Tooltip.Arrow className="fill-[#202024]" />
+            </Tooltip.Content>
+          </Tooltip.Root>
+        ) : (
+          <ArrowDown className="mx-auto" size={20} color="#737373" />
+        )}
 
         <Tooltip.Root>
-          <Tooltip.Trigger>
+          <Tooltip.Trigger className="flex align-center justify-center col-start-3">
             <Gear size={20} />
           </Tooltip.Trigger>
 
@@ -110,23 +112,24 @@ function ActionsCell({ row }) {
           </Tooltip.Content>
         </Tooltip.Root>
 
-        <Tooltip.Root>
-          <Tooltip.Trigger>
-            <Button
+        {currentUser.discordId !== selectedUser.discordId && (
+          <Tooltip.Root>
+            <Tooltip.Trigger
               onClick={handleExonerate}
+              className="flex align-center justify-center"
             >
               <XCircle size={20} />
-            </Button>
-          </Tooltip.Trigger>
+            </Tooltip.Trigger>
 
-          <Tooltip.Content
-            className="rounded p-2 bg-[#202024] shadow text-neutral-300"
-            sideOffset={5}
-          >
-            Exonerar player
-            <Tooltip.Arrow className="fill-[#202024]" />
-          </Tooltip.Content>
-        </Tooltip.Root>
+            <Tooltip.Content
+              className="rounded p-2 bg-[#202024] shadow text-neutral-300"
+              sideOffset={5}
+            >
+              Exonerar player
+              <Tooltip.Arrow className="fill-[#202024]" />
+            </Tooltip.Content>
+          </Tooltip.Root>
+        )}
       </div>
     </Tooltip.Provider>
   );

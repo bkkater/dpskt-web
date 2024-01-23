@@ -12,8 +12,7 @@ export const storeUser = async ({ player, discordId }) =>
     discordId,
   });
 
-export const updateUser = async ({user}) =>
-  api.put(`${BASE_URL}`, {...user});
+export const updateUser = async (user) => api.put(`${BASE_URL}`, { ...user });
 
-export const deleteUser = async ( playerID ) =>
+export const deleteUser = async (playerID) =>
   api.delete(`${BASE_URL}/${playerID}`);

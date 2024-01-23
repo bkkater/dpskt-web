@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -62,7 +62,7 @@ const columns = [
   }),
 ];
 
-export default function PlayersTable() {
+export default function PlayersTable({ user }) {
   const [sorting, setSorting] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -78,29 +78,30 @@ export default function PlayersTable() {
     state: {
       sorting,
       globalFilter,
+      user,
     },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
   });
 
-  const getPlayers = useCallback(async () => {
-    try {
-      const {
-        data: { users, entries, onlineClocks },
-      } = await getAllUsers();
-
-      setData(users);
-      setInfos({ totalPlayers: entries, totalClocks: onlineClocks });
-    } catch (err) {
-      setData([]);
-    }
-
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
+    const getPlayers = async () => {
+      try {
+        const {
+          data: { users, entries, onlineClocks },
+        } = await getAllUsers();
+
+        setData(users);
+        setInfos({ totalPlayers: entries, totalClocks: onlineClocks });
+      } catch (err) {
+        setData([]);
+      }
+
+      setLoading(false);
+    };
+
     getPlayers();
-  }, [getPlayers]);
+  }, [user]);
 
   return (
     <>
@@ -169,7 +170,6 @@ export default function PlayersTable() {
           </table>
         </>
       )}
-
       {isLoading && <Loading />}
     </>
   );

@@ -1,5 +1,5 @@
 /* eslint-disable function-paren-newline */
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { getSession } from "next-auth/react";
 import * as Tabs from "@radix-ui/react-tabs";
 
@@ -23,7 +23,6 @@ import PlayersTable from "@/components/Home/Admin/PlayersTable";
 import ClockCardList from "@/components/Home/ClockCardList";
 
 export default function Home({ data: { user, clocks } }) {
-  const setTimeOutInterval = useRef(null);
   const { name, isAdmin, statusClock } = user.player;
 
   const [clocksData, setClocksData] = useState(clocks);
@@ -92,8 +91,7 @@ export default function Home({ data: { user, clocks } }) {
         prevState.filter((item) => item.hash !== hash)
       );
     } catch (err) {
-      clearTimeout(setTimeOutInterval.current);
-      setTimeOutInterval.current = null;
+      console.log(err);
     }
   }, []);
 
@@ -156,7 +154,7 @@ export default function Home({ data: { user, clocks } }) {
         </Tabs.Content>
 
         <Tabs.Content value="manage" className="relative outline-none">
-          <PlayersTable />
+          <PlayersTable user={user} />
         </Tabs.Content>
       </Tabs.Root>
     </Page>
