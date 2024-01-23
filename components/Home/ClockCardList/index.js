@@ -45,7 +45,7 @@ export default function ClockCardList({ clocks, handleClockDelete }) {
               <AlertDialog.Portal>
                 <AlertDialog.Overlay className="fixed inset-0 bg-black/90" />
 
-                <AlertDialog.Content className="bg-white rounded shadow fixed inset-1/2 w-96 h-96 text-black">
+                <AlertDialog.Content className="bg-white rounded shadow fixed inset-x-1/2 w-96 h-96 text-black">
                   <AlertDialog.Title className="AlertDialogTitle">
                     Are you absolutely sure?
                   </AlertDialog.Title>

@@ -38,7 +38,10 @@ export default function Register() {
 
       await validateFormSchema(data);
 
-      await storeUser({ player: { ...data }, discordId: session.user?.id });
+      await storeUser({
+        player: { ...data, joinedAt: new Date() },
+        discordId: session.user?.id,
+      });
 
       router.push("/");
     } catch (err) {

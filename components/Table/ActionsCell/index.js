@@ -40,7 +40,7 @@ function ActionsCell({ row }) {
               onClick={handleRankUp}
               disabled={currentRoleIndex === ROLE_OPTIONS.length - 1}
             >
-              <ArrowUp size={20} color="red" />
+              <ArrowUp size={20} />
             </Button>
           </Tooltip.Trigger>
 
