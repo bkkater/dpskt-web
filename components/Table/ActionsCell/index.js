@@ -3,7 +3,8 @@ import { ArrowDown, ArrowUp, Gear, XCircle } from "phosphor-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 
 // Services
-import { updateUser } from "@/services/user";
+import { updateUser, deleteUser } from "@/services/user";
+
 
 // Components
 import Button from "@/components/Button";
@@ -31,6 +32,29 @@ function ActionsCell({ row }) {
     }
   }, [currentRoleIndex, user]);
 
+
+  const handleRankDown = useCallback(async () => {
+    try {
+      await updateUser({
+        ...user,
+        player: {
+          ...user.player,
+          role: ROLE_OPTIONS[currentRoleIndex - 1].label,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [currentRoleIndex, user]);
+
+  const handleExonerate = useCallback(async()=>{
+    try{
+      await deleteUser(user.player.id)
+    } catch (err) {
+      console.log(err)
+    }
+  },[]);
+
   return (
     <Tooltip.Provider delayDuration={300}>
       <div className="flex justify-between">
@@ -40,7 +64,7 @@ function ActionsCell({ row }) {
               onClick={handleRankUp}
               disabled={currentRoleIndex === ROLE_OPTIONS.length - 1}
             >
-              <ArrowUp size={20} />
+              <ArrowUp size={20} color="green"/>
             </Button>
           </Tooltip.Trigger>
 
@@ -54,8 +78,13 @@ function ActionsCell({ row }) {
         </Tooltip.Root>
 
         <Tooltip.Root>
-          <Tooltip.Trigger>
-            <ArrowDown size={20} />
+          <Tooltip.Trigger asChild>
+            <Button
+              onClick={handleRankDown}
+              disabled={currentRoleIndex === 0}
+            >
+              <ArrowDown size={20} color="red"/>
+            </Button>
           </Tooltip.Trigger>
 
           <Tooltip.Content
@@ -83,7 +112,11 @@ function ActionsCell({ row }) {
 
         <Tooltip.Root>
           <Tooltip.Trigger>
-            <XCircle size={20} />
+            <Button
+              onClick={handleExonerate}
+            >
+              <XCircle size={20} />
+            </Button>
           </Tooltip.Trigger>
 
           <Tooltip.Content
