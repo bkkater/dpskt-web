@@ -1,5 +1,5 @@
 /* eslint-disable function-paren-newline */
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { getSession } from "next-auth/react";
 import * as Tabs from "@radix-ui/react-tabs";
 
@@ -12,6 +12,9 @@ import {
   deleteClock,
 } from "@/services/clock";
 
+// Utils
+import uuid from "@/utils/uid";
+
 // Components
 import Page from "@/components/Page";
 import Button from "@/components/Button";
@@ -19,71 +22,80 @@ import PlayerCard from "@/components/Home/PlayerCard";
 import PlayersTable from "@/components/Home/Admin/PlayersTable";
 import ClockCardList from "@/components/Home/ClockCardList";
 
-export default function Home({ data: user }) {
+export default function Home({ data: { user, clocks } }) {
   const setTimeOutInterval = useRef(null);
-  const { name, isAdmin, id, statusClock } = user.player;
+  const { name, isAdmin, statusClock } = user.player;
 
-  const [isLoading, setLoading] = useState(true);
-  const [clocks, setClocks] = useState([]);
+  const [clocksData, setClocksData] = useState(clocks);
   const [toggleClock, setToggleClock] = useState(statusClock);
+
+  const handleClockIn = useCallback(async (userId) => {
+    const formattedClock = {
+      userId,
+      startAt: new Date(Date.now()),
+      hash: uuid(),
+    };
+
+    try {
+      await clockIn({ ...formattedClock });
+
+      setClocksData((prevState) => [formattedClock, ...prevState]);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  const handleClockOut = useCallback(
+    async (userId) => {
+      const currentDate = new Date(Date.now());
+
+      const formattedClock = {
+        userId,
+        endAt: currentDate,
+        hash: clocksData[0].hash,
+      };
+
+      try {
+        await clockOut({ ...formattedClock });
+
+        setClocksData((prevState) => {
+          prevState[0].endAt = currentDate;
+
+          return prevState;
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [clocksData]
+  );
 
   const handleClockAction = useCallback(async () => {
     try {
-      if (toggleClock) {
-        await clockOut(id);
+      if (!toggleClock) {
+        await handleClockIn(user._id);
       } else {
-        await clockIn(user._id);
+        await handleClockOut(user._id);
       }
 
       setToggleClock((prevState) => !prevState);
     } catch (err) {
       console.log(err);
     }
-  }, [id, toggleClock, user]);
+  }, [handleClockIn, handleClockOut, toggleClock, user._id]);
 
-  const handleClockDelete = useCallback(
-    async (index) => {
-      // setToastOpen(true);
+  const handleClockDelete = useCallback(async (hash) => {
+    try {
+      await deleteClock(hash);
 
-      setTimeOutInterval.current = setTimeout(async () => {
-        const deletedClock = clocks[index];
-
-        try {
-          await deleteClock(deletedClock._id);
-
-          setClocks((prevState) =>
-            prevState.filter((_, itemIndex) => itemIndex !== index)
-          );
-        } catch (err) {
-          console.log(err);
-          clearTimeout(setTimeOutInterval.current);
-          setTimeOutInterval.current = null;
-        }
-      }, 5000);
-
-      // setToastOpen(false);
-    },
-    [clocks]
-  );
-
-  const handleUndoClockDelete = useCallback(() => {}, []);
-
-  useEffect(() => {
-    async function getAllClocks() {
-      try {
-        const { data } = await getAllClocksByID({ id });
-
-        setClocks(data);
-      } catch (err) {
-        setClocks([]);
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
+      setClocksData((prevState) =>
+        prevState.filter((item) => item.hash !== hash)
+      );
+    } catch (err) {
+      clearTimeout(setTimeOutInterval.current);
+      setTimeOutInterval.current = null;
     }
-
-    if (id) getAllClocks();
-  }, [id, toggleClock]);
+  }, []);
 
   const tabClassName =
     "p-3 w-60 data-[state=active]:border-[#6550b9] data-[state=active]:border-b";
@@ -138,11 +150,8 @@ export default function Home({ data: user }) {
           className="relative py-8 grid grid-cols-2 gap-4 outline-none"
         >
           <ClockCardList
-            clocks={clocks}
-            isLoading={isLoading}
+            clocks={clocksData}
             handleClockDelete={handleClockDelete}
-            handleUndoClockDelete={handleUndoClockDelete}
-            isToastOpen
           />
         </Tabs.Content>
 
@@ -167,12 +176,16 @@ export const getServerSideProps = async (context) => {
   }
 
   try {
-    const { data } = await getUser(session.user.id);
+    const { data: user } = await getUser(session.user.id);
+    const { data: clocks } = await getAllClocksByID(user.player.id);
 
     return {
       props: {
         session,
-        data,
+        data: {
+          user,
+          clocks,
+        },
       },
     };
   } catch (err) {

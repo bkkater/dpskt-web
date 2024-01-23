@@ -1,7 +1,7 @@
 import { formatDistanceStrict } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-export default function getDistance(start, end) {
+export function getDistance(start, end) {
   const minutes = formatDistanceStrict(start, end, {
     locale: ptBR,
     unit: "minute",
@@ -24,3 +24,5 @@ export default function getDistance(start, end) {
 
   return `${minutes} minutos`;
 }
+
+export const dateFormat = "HH:mm · dd MMM yy";

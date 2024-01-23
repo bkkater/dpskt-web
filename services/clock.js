@@ -2,15 +2,14 @@ import { api } from "@/services/api";
 
 const BASE_URL = "/clocks";
 
-export const getAllClocksByID = async ({ id }) => api.get(`${BASE_URL}/${id}`);
+export const getAllClocksByID = async (id) => api.get(`${BASE_URL}/${id}`);
 
 export const getAllClocks = async () => api.post(`${BASE_URL}`);
 
-export const clockIn = async (userId) =>
-  api.post(`${BASE_URL}`, {
-    _id: userId,
-  });
+export const clockIn = async ({ hash, userId, startAt }) =>
+  api.post(`${BASE_URL}`, { hash, userId, startAt });
 
-export const clockOut = async (id) => api.put(`${BASE_URL}/${id}`);
+export const clockOut = async ({ hash, userId, endAt }) =>
+  api.put(`${BASE_URL}`, { userId, hash, endAt });
 
-export const deleteClock = async (id) => api.delete(`${BASE_URL}/${id}`);
+export const deleteClock = async (hash) => api.delete(`${BASE_URL}/${hash}`);

@@ -20,7 +20,7 @@ export default function Register() {
 
   async function validateFormSchema(data) {
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
+      name: Yup.string().min(3).required(),
       role: Yup.string().required(),
       corporation: Yup.string().required(),
       id: Yup.number().positive().required(),
