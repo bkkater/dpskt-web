@@ -6,7 +6,7 @@ function Input({ className, name, ...rest }) {
   const { fieldName, registerField } = useField(name);
 
   const classList = [
-    "w-full bg-transparent outline-none placeholder:text-neutral-600",
+    "w-full bg-transparent outline-none placeholder:text-neutral-500 text-[#E1E1E6]",
   ];
 
   if (className) {

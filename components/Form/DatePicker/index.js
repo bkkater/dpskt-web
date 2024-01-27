@@ -5,11 +5,12 @@ import DatePickerComponent from "react-datepicker";
 // Styles
 import "react-datepicker/dist/react-datepicker.css";
 
-function DatePicker({ name }) {
+function DatePicker({ defaultValue, name, placeholder }) {
   const inputRef = useRef(null);
   const { fieldName, registerField } = useField(name);
-  const today = new Date();
-  const [startDate, setStartDate] = useState(today);
+  const defaultDate = new Date(defaultValue);
+
+  const [startDate, setStartDate] = useState(defaultDate || null);
 
   useEffect(() => {
     registerField({
@@ -29,11 +30,11 @@ function DatePicker({ name }) {
     <DatePickerComponent
       ref={inputRef}
       selected={startDate}
-      minDate={today}
       name={name}
       onChange={(date) => setStartDate(date)}
-      className="bg-transparent w-full outline-none"
+      className="bg-transparent w-full outline-none text-[#E1E1E6]"
       dateFormat="dd/MM/yyyy"
+      placeholderText={placeholder}
     />
   );
 }

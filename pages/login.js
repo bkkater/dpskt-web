@@ -22,12 +22,12 @@ export default function Login() {
       <div>
         <Image src={Logo} alt="DPSKT" className="mx-auto" priority />
 
-        <p className="text-neutral-600 text-center mt-5 mb-5">
-          Faça login para abrir seu ponto!
+        <p className="text-neutral-500 text-center mt-5 mb-5">
+          Faça login para abrir acessar a plataforma!
         </p>
 
         <Button
-          className="bg-[#5865F2] text-white mt-8 h-12 w-64 font-medium text-sm"
+          className="bg-[#5865F2] text-white mt-8 h-12 w-full font-medium text-sm"
           onClick={() => signIn("discord")}
         >
           <IoLogoDiscord size={24} className="mr-3" />

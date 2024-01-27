@@ -1,162 +1,149 @@
 /* eslint-disable function-paren-newline */
-import React, { useCallback, useState } from "react";
-import { getSession } from "next-auth/react";
+import React, { use, useCallback, useEffect, useState } from "react";
+import { getSession, useSession } from "next-auth/react";
 import * as Tabs from "@radix-ui/react-tabs";
 
-// Services
-import { getUser } from "@/services/user";
-import {
-  getAllClocksByID,
-  clockIn,
-  clockOut,
-  deleteClock,
-} from "@/services/clock";
-
-// Utils
-import uuid from "@/utils/uid";
+// Hooks
+import { useUser } from "@/hooks/useUser";
+import { useClock } from "@/hooks/useClock";
 
 // Components
 import Page from "@/components/Page";
 import Button from "@/components/Button";
 import PlayerCard from "@/components/Home/PlayerCard";
-import PlayersTable from "@/components/Home/Admin/PlayersTable";
+import Loading from "@/components/Loading";
 import ClockCardList from "@/components/Home/ClockCardList";
+import PlayersTable from "@/components/Home/PlayersTable";
 
-export default function Home({ data: { user, clocks } }) {
-  const { name, isAdmin, statusClock } = user.player;
+export default function Home() {
+  const { data: session } = useSession();
+  const {
+    isLoading,
+    fetchUser,
+    user,
+    fetchAllUsers,
+    allUsers: { data },
+  } = useUser();
+  const { fetchClocksByID } = useClock();
 
-  const [clocksData, setClocksData] = useState(clocks);
-  const [toggleClock, setToggleClock] = useState(statusClock);
+  const [searchUser, setSearchUser] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState(data);
 
-  const handleClockIn = useCallback(async (userId) => {
-    const formattedClock = {
-      userId,
-      startAt: new Date(Date.now()),
-      hash: uuid(),
-    };
+  useEffect(() => {
+    fetchUser(session.user.id);
+  }, [fetchUser, session.user.id]);
 
-    try {
-      await clockIn({ ...formattedClock });
-
-      setClocksData((prevState) => [formattedClock, ...prevState]);
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    if (user?.player.id) {
+      fetchClocksByID(user.player.id);
     }
-  }, []);
+  }, [fetchClocksByID, user]);
 
-  const handleClockOut = useCallback(
-    async (userId) => {
-      const currentDate = new Date(Date.now());
+  useEffect(() => {
+    fetchAllUsers();
+  }, [fetchAllUsers]);
 
-      const formattedClock = {
-        userId,
-        endAt: currentDate,
-        hash: clocksData[0].hash,
-      };
+  const handleSearchChange = useCallback(
+    (e) => {
+      const searchTerm = e.target.value;
+      setSearchUser(searchTerm);
+      const regex = new RegExp(searchTerm, "i");
 
-      try {
-        await clockOut({ ...formattedClock });
+      const filteredItem = data.filter((userItem) => {
+        const playerIdMatch = userItem.player.id.match(regex);
+        const playerNameMatch = userItem.player.name.match(regex);
 
-        setClocksData((prevState) => {
-          prevState[0].endAt = currentDate;
+        return playerIdMatch || playerNameMatch;
+      });
 
-          return prevState;
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      setFilteredUsers(filteredItem);
     },
-    [clocksData]
+    [data]
   );
-
-  const handleClockAction = useCallback(async () => {
-    try {
-      if (!toggleClock) {
-        await handleClockIn(user._id);
-      } else {
-        await handleClockOut(user._id);
-      }
-
-      setToggleClock((prevState) => !prevState);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [handleClockIn, handleClockOut, toggleClock, user._id]);
-
-  const handleClockDelete = useCallback(async (hash) => {
-    try {
-      await deleteClock(hash);
-
-      setClocksData((prevState) =>
-        prevState.filter((item) => item.hash !== hash)
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
 
   const tabClassName =
     "p-3 w-60 data-[state=active]:border-[#6550b9] data-[state=active]:border-b";
 
   return (
     <Page pageTitle="Home">
-      <div className="flex justify-between align-center mb-8">
-        <h2 className="font-normal text-2xl">
-          Olá,
-          <span className="font-bold ml-2">{name}</span>
-        </h2>
+      {!isLoading && user && (
+        <>
+          <div className="flex justify-between align-center mb-8">
+            <h2 className="font-normal text-2xl">
+              Olá,
+              <span className="font-bold ml-2">{user.player.name}</span>
+            </h2>
 
-        <Button className="border-[#6550b9] border font-medium px-6 h-12 transition-transform hover:scale-105">
-          Comunicar problema
-        </Button>
-      </div>
+            <Button className="border-[#6550b9] border font-medium px-6 h-12 transition-transform hover:scale-105">
+              Comunicar problema
+            </Button>
+          </div>
 
-      <PlayerCard
-        user={user}
-        toggleClock={toggleClock}
-        handleClockAction={handleClockAction}
-      />
+          <PlayerCard />
 
-      <Tabs.Root
-        className="flex flex-col min-w-fit mt-8"
-        defaultValue="history"
-      >
-        <Tabs.List className="shrink-0 flex border-b border-[#2B2D42] text-lg">
-          <Tabs.Trigger value="history" className={tabClassName}>
-            Histórico de Pontos
-          </Tabs.Trigger>
-
-          {isAdmin && (
-            <>
-              <Tabs.Trigger value="manage" className={tabClassName}>
-                Gerenciar Players
+          <Tabs.Root
+            className="flex flex-col min-w-fit mt-8"
+            defaultValue="clockManage"
+          >
+            <Tabs.List className="shrink-0 flex border-b border-[#2B2D42] text-lg">
+              <Tabs.Trigger value="history" className={tabClassName}>
+                Histórico de Pontos
               </Tabs.Trigger>
 
-              <Tabs.Trigger value="teste" className={tabClassName}>
-                Gerenciar Pontos
-              </Tabs.Trigger>
+              {user.player.isAdmin && (
+                <>
+                  <Tabs.Trigger value="playerManage" className={tabClassName}>
+                    Gerenciar Players
+                  </Tabs.Trigger>
 
-              <Tabs.Trigger value="alo" className={tabClassName}>
-                Criar Notificação
-              </Tabs.Trigger>
-            </>
-          )}
-        </Tabs.List>
+                  <Tabs.Trigger value="clockManage" className={tabClassName}>
+                    Gerenciar Pontos
+                  </Tabs.Trigger>
 
-        <Tabs.Content
-          value="history"
-          className="relative py-8 grid grid-cols-2 gap-4 outline-none"
-        >
-          <ClockCardList
-            clocks={clocksData}
-            handleClockDelete={handleClockDelete}
-          />
-        </Tabs.Content>
+                  <Tabs.Trigger value="alo" className={tabClassName}>
+                    Criar Notificação
+                  </Tabs.Trigger>
+                </>
+              )}
+            </Tabs.List>
 
-        <Tabs.Content value="manage" className="relative outline-none">
-          <PlayersTable user={user} />
-        </Tabs.Content>
-      </Tabs.Root>
+            <Tabs.Content
+              value="history"
+              className="relative py-8 grid grid-cols-2 gap-4 outline-none"
+            >
+              <ClockCardList />
+            </Tabs.Content>
+
+            <Tabs.Content
+              value="playerManage"
+              className="relative outline-none"
+            >
+              <PlayersTable />
+            </Tabs.Content>
+
+            <Tabs.Content value="clockManage" className="relative outline-none">
+              <>
+                <input
+                  value={searchUser}
+                  onChange={handleSearchChange}
+                  placeholder="Pesquisar player"
+                  className="w-96 bg-neutral-800 outline-none rounded placeholder:text-neutral-600 h-10 px-4 border-[#2B2D42] border-2"
+                />
+
+                {searchUser && (
+                  <ul>
+                    {filteredUsers.map(({ player }) => (
+                      <li key={player.id}>{`${player.id} · ${player.name}`}</li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            </Tabs.Content>
+          </Tabs.Root>
+        </>
+      )}
+
+      {isLoading && <Loading className="absolute left-1/2 top-1/2" />}
     </Page>
   );
 }
@@ -173,28 +160,9 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  try {
-    const { data: user } = await getUser(session.user.id);
-    const { data: clocks } = await getAllClocksByID(user.player.id);
-
-    return {
-      props: {
-        session,
-        data: {
-          user,
-          clocks,
-        },
-      },
-    };
-  } catch (err) {
-    return {
-      redirect: {
-        destination: "/register",
-        permanent: false,
-      },
-      props: {
-        session,
-      },
-    };
-  }
+  return {
+    props: {
+      session,
+    },
+  };
 };

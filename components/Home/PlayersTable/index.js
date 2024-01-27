@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { format } from "date-fns";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -8,23 +9,45 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 
-// Services
-import { getAllUsers } from "@/services/user";
+// Hooks
+import { useUser } from "@/hooks/useUser";
 
 // Config
 import { ROLE_OPTIONS } from "@/config/general";
 
 // Components
+import CheckboxCell from "@/components/Home/PlayersTable/CheckboxCell";
+import ActionsCell from "@/components/Home/PlayersTable/ActionsCell";
 import Loading from "@/components/Loading";
-import CheckboxCell from "@/components/Table/CheckboxCell";
-import ActionsCell from "@/components/Table/ActionsCell";
 
 const columnHelper = createColumnHelper();
 
 const columns = [
+  columnHelper.accessor("player.statusClock", {
+    header: () => "Em serviço",
+    cell: (props) => {
+      const iconClassName = ["w-2 h-2 rounded-full my-auto mr-2"];
+
+      if (props.renderValue()) {
+        iconClassName.push("bg-[#2D8F60]");
+      } else {
+        iconClassName.push("bg-[#A12525]");
+      }
+
+      return <div className={iconClassName.join(" ")} />;
+    },
+    size: 80,
+  }),
+  columnHelper.accessor("player.joinedAt", {
+    cell: (info) => format(info.renderValue(), "dd MMM yy"),
+    sortType: "datetime",
+    header: () => "Recrutamento",
+    size: 100,
+  }),
   columnHelper.accessor("player.id", {
     cell: (info) => info.renderValue(),
     header: () => "ID",
+    size: 80,
   }),
   columnHelper.accessor("player.name", {
     id: "name",
@@ -34,6 +57,7 @@ const columns = [
   columnHelper.accessor("player.corporation", {
     header: () => "Corporação",
     cell: (info) => info.renderValue(),
+    size: 80,
   }),
   columnHelper.accessor("player.role", {
     header: () => "Cargo",
@@ -62,15 +86,14 @@ const columns = [
   }),
 ];
 
-export default function PlayersTable({ user }) {
+export default function PlayersTable() {
+  const { allUsers, isLoading } = useUser();
+
   const [sorting, setSorting] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [data, setData] = useState([]);
-  const [infos, setInfos] = useState(null);
 
   const table = useReactTable({
-    data,
+    data: allUsers.data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -78,52 +101,36 @@ export default function PlayersTable({ user }) {
     state: {
       sorting,
       globalFilter,
-      user,
     },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
   });
-
-  useEffect(() => {
-    const getPlayers = async () => {
-      try {
-        const {
-          data: { users, entries, onlineClocks },
-        } = await getAllUsers();
-
-        setData(users);
-        setInfos({ totalPlayers: entries, totalClocks: onlineClocks });
-      } catch (err) {
-        setData([]);
-      }
-
-      setLoading(false);
-    };
-
-    getPlayers();
-  }, [user]);
 
   return (
     <>
       {!isLoading && (
         <>
           <div className="flex jujstify-between align-center gap-4">
-            {infos && (
+            {allUsers && (
               <>
                 <p className="text-neutral-400">
                   Total de players:
-                  <b className="text-neutral-300 ml-2">{infos.totalPlayers}</b>
+                  <b className="text-neutral-300 ml-2">
+                    {allUsers.totalPlayers}
+                  </b>
                 </p>
                 <span className="text-neutral-300">·</span>
                 <p className="text-neutral-400">
                   Total de players patrulhando:
-                  <b className="text-neutral-300 ml-2">{infos.totalClocks}</b>
+                  <b className="text-neutral-300 ml-2">
+                    {allUsers.totalClocks}
+                  </b>
                 </p>
               </>
             )}
 
             <input
-              placeholder="Pesquisar"
+              placeholder="Pesquisar player"
               name="search"
               onChange={({ target }) => setGlobalFilter(target.value)}
               className="w-96 bg-neutral-800 outline-none rounded placeholder:text-neutral-600 flex ml-auto h-10 px-4 border-[#2B2D42] border-2"
@@ -139,6 +146,9 @@ export default function PlayersTable({ user }) {
                       key={header.id}
                       className="px-6 py-4 text-left text-xs font-medium  uppercase tracking-wider cursor-pointer"
                       onClick={header.column.getToggleSortingHandler()}
+                      style={{
+                        width: header.getSize(),
+                      }}
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -157,7 +167,13 @@ export default function PlayersTable({ user }) {
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
+                    <td
+                      key={cell.id}
+                      className="px-6 py-4 whitespace-nowrap"
+                      style={{
+                        width: cell.column.getSize(),
+                      }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

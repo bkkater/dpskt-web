@@ -2,7 +2,7 @@ import { api } from "@/services/api";
 
 const BASE_URL = "/clocks";
 
-export const getAllClocksByID = async (id) => api.get(`${BASE_URL}/${id}`);
+export const getClocksById = async (id) => api.get(`${BASE_URL}/${id}`);
 
 export const getAllClocks = async () => api.post(`${BASE_URL}`);
 

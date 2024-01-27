@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function Loading() {
+export default function Loading({ className }) {
   return (
-    <div role="status" className="absolute left-1/2 top-20">
+    <div role="status" className={className}>
       <svg
         aria-hidden="true"
         className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-[#19b2f5]"

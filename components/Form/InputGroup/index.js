@@ -30,7 +30,9 @@ function InputGroup({
 
   return (
     <div className={divClassList.join(" ")}>
-      {!hideLabel && label && <span className="mb-2 text-md">{label}</span>}
+      {!hideLabel && label && (
+        <span className="mb-2 text-md   text-[#E1E1E6]">{label}</span>
+      )}
 
       <div className={containerClassList.join(" ")}>
         {LeftIcon && <LeftIcon size={24} color="#7C7C8A" className="mr-2" />}

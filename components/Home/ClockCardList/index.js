@@ -4,14 +4,19 @@ import { Trash } from "phosphor-react";
 import { format } from "date-fns";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 
+// Hooks
+import { useClock } from "@/hooks/useClock";
+
 // Utils
 import { dateFormat, getDistance } from "@/utils/date";
 
-export default function ClockCardList({ clocks, handleClockDelete }) {
+export default function ClockCardList() {
+  const { playerClocks, onClockDelete } = useClock();
+
   return (
     <>
-      {!!clocks.length &&
-        clocks.map(({ startAt, endAt, hash }) => (
+      {!!playerClocks.length &&
+        playerClocks.map(({ startAt, endAt, hash }) => (
           <div
             className="rounded p-8 flex justify-between bg-[#0a0a0a] hover:bg-[#0e0e0e] hover:border-[#6550b9] border-2 border-[#29292E] transition-color"
             key={hash}
@@ -63,7 +68,7 @@ export default function ClockCardList({ clocks, handleClockDelete }) {
                     </AlertDialog.Cancel>
 
                     <AlertDialog.Action
-                      onClick={() => handleClockDelete(hash)}
+                      onClick={() => onClockDelete(hash)}
                       className="bg-[#ffdbdc] py-2 px-3 rounded text-[#ff4d4d] font-medium"
                     >
                       Sim, deletar ponto
@@ -75,7 +80,7 @@ export default function ClockCardList({ clocks, handleClockDelete }) {
           </div>
         ))}
 
-      {!clocks.length && (
+      {!playerClocks.length && (
         <p className="text-neutral-500 mt-4">Nenhum registro encontrado</p>
       )}
     </>

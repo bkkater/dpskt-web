@@ -41,6 +41,10 @@ const customStyles = {
     ...styles,
     backgroundColor: state.isFocused ? "#2274A5" : "transparent",
   }),
+  placeholder: (styles) => ({
+    ...styles,
+    color: "#737373",
+  }),
   singleValue: (styles) => ({
     ...styles,
     color: "white",

@@ -73,7 +73,6 @@ function DiscordService() {
     try {
       await api.post(`/webhooks/${id}/${token}`, body);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error);
     }
   };

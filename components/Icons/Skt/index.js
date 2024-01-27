@@ -6,7 +6,7 @@ import SktIcon from "@/resources/skt.png";
 
 function SktIconComponent() {
   return (
-    <div className="skt absolute bottom-10">
+    <div className="flex flex-col gap-4 align-center absolute bottom-10">
       <Image
         src={SktIcon}
         className="w-28 self-center"
@@ -14,7 +14,7 @@ function SktIconComponent() {
         priority
       />
 
-      <span>DISCORD.GG/SKTCITY</span>
+      <span className="text-xs">DISCORD.GG/SKTCITY</span>
     </div>
   );
 }
