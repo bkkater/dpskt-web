@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigation } from "react-day-picker";
 import { format } from "date-fns";
-import { ArrowLeft, ArrowRight } from "phosphor-react";
+import { CaretLeft, CaretRight } from "phosphor-react";
 
 export default function CustomCaption({ displayMonth }) {
   const { goToMonth, nextMonth, previousMonth } = useNavigation();
@@ -14,7 +14,7 @@ export default function CustomCaption({ displayMonth }) {
         aria-label="Go to Previous Month"
         type="button"
       >
-        <ArrowLeft size={20} color="#737373" />
+        <CaretLeft size={20} color="#737373" />
       </button>
 
       <p className="text font-bold text-neutral-300">
@@ -27,7 +27,7 @@ export default function CustomCaption({ displayMonth }) {
         aria-label="Go to Previous Month"
         type="button"
       >
-        <ArrowRight size={20} color="#737373" />
+        <CaretRight size={20} color="#737373" />
       </button>
     </div>
   );

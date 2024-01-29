@@ -5,13 +5,18 @@ import * as SelectUI from "@radix-ui/react-select";
 
 import InputGroup from "../InputGroup";
 
+const STYLE_TYPES = {
+  dark: "bg-neutral-800",
+  darken: "bg-[#121214]",
+};
+
 function SelectComponent(
   {
     value,
     onChange,
     options,
     label,
-    styleType,
+    styleType = "darken",
     className = null,
     error = null,
     icon = null,
@@ -20,8 +25,19 @@ function SelectComponent(
   },
   ref
 ) {
+  const classList = ["shadow rounded-b w-60 bottom-0"];
+
+  if (styleType) {
+    classList.push(STYLE_TYPES[styleType]);
+  }
+
   return (
-    <SelectUI.Root value={value} onValueChange={onChange} {...rest}>
+    <SelectUI.Root
+      value={value}
+      onValueChange={onChange}
+      styleType={styleType}
+      {...rest}
+    >
       <InputGroup
         label={label}
         icon={icon}
@@ -43,8 +59,10 @@ function SelectComponent(
       </InputGroup>
 
       <SelectUI.Content
-        className="shadow bg-[#121214] rounded-b w-80 bottom-0 -translate-x-[43px]"
+        className={classList.join(" ")}
         position="popper"
+        align="start"
+        alignOffset={icon ? -44 : -14}
         sideOffset={12}
       >
         <SelectUI.ScrollUpButton className="flex items-center justify-center">

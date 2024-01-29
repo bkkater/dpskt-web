@@ -95,16 +95,23 @@ export default function Home() {
               )}
             </Tabs.Content>
 
-            <Tabs.Content
-              value="playerManage"
-              className="relative outline-none"
-            >
-              <PlayersTable />
-            </Tabs.Content>
+            {user.player.isAdmin && (
+              <>
+                <Tabs.Content
+                  value="playerManage"
+                  className="relative outline-none"
+                >
+                  <PlayersTable />
+                </Tabs.Content>
 
-            <Tabs.Content value="clockManage" className="relative outline-none">
-              <ClockManage />
-            </Tabs.Content>
+                <Tabs.Content
+                  value="clockManage"
+                  className="relative outline-none"
+                >
+                  <ClockManage />
+                </Tabs.Content>
+              </>
+            )}
           </Tabs.Root>
         </>
       )}

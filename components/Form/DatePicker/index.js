@@ -21,8 +21,7 @@ export default function DatePicker({
     ...styles,
     cell: "w-9 h-9 text-center",
     day: "hover:bg-neutral-700 w-full h-full transition-colors rounded m-0 font-normal text-sm",
-    day_today:
-      "relative text-[#286f8d] font-bold before:rounded-full before:bg-[#286f8d] before:w-[5px] before:h-[5px] before:absolute before:top-px before:left-1/2 before:transform before:-translate-x-1/2",
+    day_today: "relative font-bold before:rounded-full border-[#286f8d]",
     day_selected: "bg-neutral-700",
   };
 
