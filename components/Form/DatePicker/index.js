@@ -1,42 +1,66 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useField } from "@unform/core";
-import DatePickerComponent from "react-datepicker";
+import React, { useCallback } from "react";
+import * as Popover from "@radix-ui/react-popover";
+import { DayPicker } from "react-day-picker";
+import { ptBR } from "date-fns/locale";
+import styles from "react-day-picker/dist/style.module.css";
 
-// Styles
-import "react-datepicker/dist/react-datepicker.css";
+// Components
+import CustomCaption from "./CustomCaption";
 
-function DatePicker({ defaultValue, name, placeholder }) {
-  const inputRef = useRef(null);
-  const { fieldName, registerField } = useField(name);
-  const defaultDate = new Date(defaultValue);
+export default function DatePicker({
+  className,
+  mode,
+  date,
+  onDayClick,
+  children,
+  ...rest
+}) {
+  const [showPopover, setShowPopover] = React.useState(false);
 
-  const [startDate, setStartDate] = useState(defaultDate || null);
+  const styleClassNames = {
+    ...styles,
+    cell: "w-9 h-9 text-center",
+    day: "hover:bg-neutral-700 w-full h-full transition-colors rounded m-0 font-normal text-sm",
+    day_today:
+      "relative text-[#286f8d] font-bold before:rounded-full before:bg-[#286f8d] before:w-[5px] before:h-[5px] before:absolute before:top-px before:left-1/2 before:transform before:-translate-x-1/2",
+    day_selected: "bg-neutral-700",
+  };
 
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef,
-      getValue: (ref) => ref.current?.input.value,
-      setValue: (ref, value) => {
-        ref.current.input.value = value;
-      },
-      clearValue: (ref) => {
-        ref.current.value = "";
-      },
-    });
-  }, [fieldName, registerField]);
+  const handleDateChange = useCallback(
+    (selectedDate) => {
+      onDayClick(selectedDate);
+
+      setShowPopover(false);
+    },
+    [onDayClick]
+  );
 
   return (
-    <DatePickerComponent
-      ref={inputRef}
-      selected={startDate}
-      name={name}
-      onChange={(date) => setStartDate(date)}
-      className="bg-transparent w-full outline-none text-[#E1E1E6]"
-      dateFormat="dd/MM/yyyy"
-      placeholderText={placeholder}
-    />
+    <Popover.Root open={showPopover} onOpenChange={setShowPopover}>
+      <Popover.Trigger className="w-full" {...rest}>
+        {children}
+      </Popover.Trigger>
+
+      <Popover.Content
+        className="bg-neutral-800 z-50 rounded-lg shadow-lg border-2 border-[#29292E]"
+        side="top"
+        align="start"
+        sideOffset={8}
+      >
+        <DayPicker
+          hideHead
+          showOutsideDays
+          className="text-sm font-bold"
+          mode={mode}
+          selected={date}
+          onDayClick={handleDateChange}
+          locale={ptBR}
+          classNames={styleClassNames}
+          components={{
+            Caption: CustomCaption,
+          }}
+        />
+      </Popover.Content>
+    </Popover.Root>
   );
 }
-
-export default DatePicker;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IoLogoDiscord } from "react-icons/io5";
 import { format } from "date-fns";
 import {
   createColumnHelper,
@@ -19,6 +20,7 @@ import { ROLE_OPTIONS } from "@/config/general";
 import CheckboxCell from "@/components/Home/PlayersTable/CheckboxCell";
 import ActionsCell from "@/components/Home/PlayersTable/ActionsCell";
 import Loading from "@/components/Loading";
+import Button from "@/components/Button";
 
 const columnHelper = createColumnHelper();
 
@@ -110,7 +112,7 @@ export default function PlayersTable() {
     <>
       {!isLoading && (
         <>
-          <div className="flex jujstify-between align-center gap-4">
+          <div className="flex align-center gap-4 py-8">
             {allUsers && (
               <>
                 <p className="text-neutral-400">
@@ -129,15 +131,21 @@ export default function PlayersTable() {
               </>
             )}
 
+            <Button className="bg-[#286f8d] h-12 w-52 font-medium shadow transition-all text-[#e1e1e6] flex items-center gap-2 border-[#286f8d] hover:bg-transparent border ml-auto ">
+              <IoLogoDiscord size={20} />
+              Exportar hierarquia
+            </Button>
+
             <input
-              placeholder="Pesquisar player"
+              placeholder="Pesquisar"
               name="search"
               onChange={({ target }) => setGlobalFilter(target.value)}
-              className="w-96 bg-neutral-800 outline-none rounded placeholder:text-neutral-600 flex ml-auto h-10 px-4 border-[#2B2D42] border-2"
+              className="w-96 bg-neutral-800 outline-none rounded placeholder:text-neutral-600 flex h-12 px-4 border-2  border-neutral-800 focus:border-[#084551]"
+              autoComplete="off"
             />
           </div>
 
-          <table className="min-w-full mt-8">
+          <table className="min-w-full mt-4">
             <thead className="bg-neutral-800 rounded">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>

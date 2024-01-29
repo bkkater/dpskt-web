@@ -34,12 +34,13 @@ export default function UserProvider({ children }) {
 
       setAllUsers((prevState) => {
         const newState = { ...prevState };
-        const updatedData = prevState.data.map((item, index) => {
+
+        const updatedData = prevState.data.map((userData, index) => {
           if (index === userIndex) {
             return updatedUser;
           }
 
-          return user;
+          return userData;
         });
 
         return { ...newState, data: updatedData };
@@ -86,10 +87,16 @@ export default function UserProvider({ children }) {
   }, []);
 
   const registerUser = useCallback(async (discordId, data) => {
-    await storeUser({
+    setLoading(true);
+
+    const newUser = {
       player: { ...data, joinedAt: new Date() },
       discordId,
-    });
+    };
+
+    await storeUser(newUser);
+
+    setLoading(false);
   }, []);
 
   const rankPlayerUp = useCallback(

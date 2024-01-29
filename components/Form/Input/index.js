@@ -1,33 +1,32 @@
-import { useField } from "@unform/core";
-import React, { useEffect, useRef } from "react";
+import React, { forwardRef } from "react";
+import InputGroup from "../InputGroup";
 
-function Input({ className, name, ...rest }) {
-  const inputRef = useRef(null);
-  const { fieldName, registerField } = useField(name);
-
+function InputComponent(
+  { name, label, className, styleType, error = null, icon = null, ...rest },
+  ref
+) {
   const classList = [
-    "w-full bg-transparent outline-none placeholder:text-neutral-500 text-[#E1E1E6]",
+    "w-full bg-[#121214] active:bg-[#121214] outline-none placeholder:text-neutral-500 text-[#E1E1E6]",
   ];
 
   if (className) {
     classList.push(className);
   }
 
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef,
-      getValue: (ref) => ref.current.value,
-      setValue: (ref, value) => {
-        ref.current.value = value;
-      },
-      clearValue: (ref) => {
-        ref.current.value = "";
-      },
-    });
-  }, [fieldName, registerField]);
-
-  return <input ref={inputRef} className={classList.join(" ")} {...rest} />;
+  return (
+    <InputGroup icon={icon} error={error} label={label} styleType={styleType}>
+      <input
+        name={name}
+        id={name}
+        ref={ref}
+        className={classList.join(" ")}
+        autoComplete="off"
+        {...rest}
+      />
+    </InputGroup>
+  );
 }
+
+const Input = forwardRef(InputComponent);
 
 export default Input;

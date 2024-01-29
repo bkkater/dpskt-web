@@ -12,7 +12,6 @@ import {
   clockIn,
   clockOut,
   deleteClock,
-  getAllClocks,
   getClocksById,
 } from "@/services/clock";
 
@@ -23,16 +22,6 @@ export default function ClockProvider({ children }) {
 
   const [isLoading, setLoading] = useState(false);
   const [playerClocks, setPlayerClocks] = useState([]);
-  const [allClocks, setAllClocks] = useState([]);
-
-  const fetchAllClocks = useCallback(async () => {
-    setLoading(true);
-
-    const { data } = await getAllClocks();
-
-    setAllClocks(data);
-    setLoading(false);
-  }, []);
 
   const fetchClocksByID = useCallback(async (playerId) => {
     setLoading(true);
@@ -110,22 +99,12 @@ export default function ClockProvider({ children }) {
   const contextValue = useMemo(
     () => ({
       isLoading,
-      allClocks,
       playerClocks,
-      fetchAllClocks,
       fetchClocksByID,
       onClockAction,
       onClockDelete,
     }),
-    [
-      allClocks,
-      fetchAllClocks,
-      fetchClocksByID,
-      isLoading,
-      onClockAction,
-      onClockDelete,
-      playerClocks,
-    ]
+    [fetchClocksByID, isLoading, onClockAction, onClockDelete, playerClocks]
   );
 
   return (

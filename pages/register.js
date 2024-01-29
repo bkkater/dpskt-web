@@ -1,129 +1,156 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback } from "react";
+import * as SelectUI from "@radix-ui/react-select";
+import * as Yup from "yup";
+import { useRouter } from "next/router";
 import { getSession, useSession } from "next-auth/react";
 import { IdentificationCard, PoliceCar, Suitcase, User } from "phosphor-react";
-import { useRouter } from "next/router";
-import { Form } from "@unform/web";
-import * as Yup from "yup";
-
-// Services
-import { getUser, storeUser } from "@/services/user";
+import { Controller, useForm } from "react-hook-form";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 // Config
 import { CORPORATION_OPTIONS, ROLE_OPTIONS } from "@/config/general";
 
+// Services
+import { getUser } from "@/services/user";
+
+// Hooks
+import { useUser } from "@/hooks/useUser";
+
 // Components
 import Page from "@/components/Page";
 import Button from "@/components/Button";
-import Select from "@/components/Form/Select";
-import InputGroup from "@/components/Form/InputGroup";
 import Input from "@/components/Form/Input";
+import Select from "@/components/Form/Select";
+
+// Validation
+const schema = Yup.object().shape({
+  name: Yup.string().min(3).required(),
+  role: Yup.string().required(),
+  corporation: Yup.string().required(),
+  id: Yup.number().positive().required(),
+});
 
 export default function Register() {
-  const formRef = useRef();
-  const [errors, setErrors] = useState([]);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const { data: session } = useSession();
+  const { registerUser, isLoading } = useUser();
   const router = useRouter();
 
-  async function validateFormSchema(data) {
-    const schema = Yup.object().shape({
-      name: Yup.string().min(3).required(),
-      role: Yup.string().required(),
-      corporation: Yup.string().required(),
-      id: Yup.number().positive().required(),
-    });
+  const handleRegisterSubmit = useCallback(
+    async (data) => {
+      try {
+        await registerUser(session.user?.id, data);
 
-    return schema.validate(data, { abortEarly: false });
-  }
-
-  const handleSubmit = useCallback(async () => {
-    try {
-      formRef.current.setErrors([]);
-      setErrors([]);
-
-      const data = formRef.current.getData();
-
-      await validateFormSchema(data);
-
-      // Chamar o contexto
-      await storeUser({
-        player: { ...data, joinedAt: new Date() },
-        discordId: session.user?.id,
-      });
-
-      router.push("/");
-    } catch (err) {
-      const validationErrors = {};
-
-      if (err instanceof Yup.ValidationError) {
-        err.inner.forEach((error) => {
-          validationErrors[error.path] = error.message;
-        });
-
-        formRef.current.setErrors(validationErrors);
-        setErrors(validationErrors);
+        router.push("/");
+      } catch (err) {
+        console.log(err);
       }
-    }
-  }, [router, session.user?.id]);
+    },
+    [registerUser, router, session.user?.id]
+  );
 
   return (
     <Page className="flex items-center justify-center" pageTitle="Registro">
-      <div className="bg-[#202024] p-10 rounded w-100  ">
+      <div className="bg-[#202024] p-10 rounded w-100 min-h-96">
         <h1 className="text-2xl mb-2 text-start">Registro</h1>
 
         <p className="text-neutral-500 text-start mb-8">
           Insira informações do seu personagem
         </p>
 
-        <Form ref={formRef} onSubmit={handleSubmit}>
-          <InputGroup
+        <form onSubmit={handleSubmit(handleRegisterSubmit)}>
+          <Input
             label="Nome"
-            hideLabel
-            leftIcon={User}
-            error={errors?.name}
-          >
-            <Input name="name" placeholder="Nome Completo" />
-          </InputGroup>
+            placeholder="Nome Completo"
+            icon={User}
+            error={errors.name?.message}
+            {...register("name")}
+          />
 
-          <InputGroup
+          <Input
             label="ID"
-            hideLabel
-            leftIcon={IdentificationCard}
-            error={errors?.id}
-          >
-            <Input type="number" name="id" placeholder="ID" />
-          </InputGroup>
+            placeholder="ID"
+            type="number"
+            icon={IdentificationCard}
+            error={errors.id?.message || null}
+            {...register("id")}
+          />
 
-          <InputGroup
-            className="flex-1"
-            leftIcon={PoliceCar}
-            error={errors?.corporation}
-            label="corporation"
-            hideLabel
-          >
-            <Select
-              options={CORPORATION_OPTIONS}
-              name="corporation"
-              placeholder="Corporação"
-            />
-          </InputGroup>
+          <Controller
+            control={control}
+            name="corporation"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                label="Corporação"
+                icon={PoliceCar}
+                value={value}
+                onChange={onChange}
+                error={errors.corporation?.message || null}
+              >
+                {CORPORATION_OPTIONS.map((option) => (
+                  <SelectUI.Item
+                    className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-800 last:border-transparent"
+                    value={option.label}
+                    key={option.label}
+                  >
+                    <div className="flex items-center">
+                      <SelectUI.ItemText>{option.label}</SelectUI.ItemText>
+                      <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
+                        <CheckIcon />
+                      </SelectUI.ItemIndicator>
+                    </div>
+                  </SelectUI.Item>
+                ))}
+              </Select>
+            )}
+          />
 
-          <InputGroup
-            className="flex-1"
-            leftIcon={Suitcase}
-            error={errors?.role}
-            label="Patente"
-            hideLabel
-          >
-            <Select options={ROLE_OPTIONS} name="role" placeholder="Patente" />
-          </InputGroup>
+          <Controller
+            control={control}
+            name="role"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                label="Cargo"
+                icon={Suitcase}
+                value={value}
+                onChange={onChange}
+                error={errors.role?.message || null}
+              >
+                {ROLE_OPTIONS.map((option) => (
+                  <SelectUI.Item
+                    className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-800 last:border-transparent"
+                    value={option.label}
+                    key={option.label}
+                  >
+                    <div className="flex items-center">
+                      <SelectUI.ItemText>{option.label}</SelectUI.ItemText>
+                      <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
+                        <CheckIcon />
+                      </SelectUI.ItemIndicator>
+                    </div>
+                  </SelectUI.Item>
+                ))}
+              </Select>
+            )}
+          />
 
           <Button
-            className="bg-[#286f8d] h-12 font-bold mt-8 w-full text-sm py-2 shadow shadow-neutral-900 transition-colors"
+            className="bg-[#286f8d] hover:bg-[#4689b3]  h-12 font-bold mt-8 w-full text-sm py-2 shadow shadow-neutral-900 transition-colors disabled:bg-[#1d2a30]"
             type="submit"
+            disabled={isLoading}
           >
             CADASTRAR
           </Button>
-        </Form>
+        </form>
       </div>
     </Page>
   );

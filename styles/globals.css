@@ -8,6 +8,7 @@
   body {
     font-family: "Ubuntu", sans-serif;
     height: 100vh;
+
     @apply bg-[#121214] text-[#e1e1e6] m-0 p-0;
   }
 

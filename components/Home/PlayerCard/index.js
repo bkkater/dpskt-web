@@ -34,11 +34,11 @@ export default function PlayerCard() {
       </div>
 
       <Button
-        className="bg-[#121214] font-medium py-2 px-12 h-12 my-auto hover:bg-[#0a0a0a] transition-color"
+        className="bg-[#121214] font-medium py-2 px-12 h-12 my-auto hover:bg-[#0a0a0a] transition-colors"
         onClick={() => onClockAction(user)}
       >
         <Clipboard size={20} className="mr-2" />
-        {user.player.statusClock ? "FECHAR PONTO" : "ABRIR PONTO"}
+        {user.player.statusClock ? "Fechar Ponto" : "Abrir Ponto"}
       </Button>
 
       <div className="flex self-center align-center justify-end flex-1">

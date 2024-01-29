@@ -1,55 +1,23 @@
-import { useField } from "@unform/core";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
+import { CheckIcon } from "@radix-ui/react-icons";
 import * as CheckboxUi from "@radix-ui/react-checkbox";
 
-import { CheckIcon } from "@radix-ui/react-icons";
-
-function Checkbox({ children, name, value, onChange, label, ...props }) {
-  const inputRef = useRef(null);
-  const { fieldName, registerField, defaultValue, error, clearError } =
-    useField(name);
-
-  const [checked, setChecked] = useState(defaultValue === value);
-
-  const handleChange = useCallback(
-    (checkedValue) => {
-      if (error) {
-        clearError();
-      }
-
-      setChecked(checkedValue);
-
-      if (onChange) {
-        onChange(checkedValue);
-      }
-    },
-    [clearError, error, onChange]
-  );
-
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef,
-      getValue: (ref) => ref.current.parentNode.children[1].checked,
-      clearValue: () => {
-        setChecked(false);
-      },
-      setValue: (ref, newValue) => {
-        setChecked(newValue);
-      },
-    });
-  }, [fieldName, registerField]);
+function CheckboxComponent(
+  { name, label, className, checked = false, ...rest },
+  ref
+) {
+  const [isChecked, setChecked] = useState(checked);
 
   return (
     <div className="flex align-center mt-7">
       <CheckboxUi.Root
-        ref={inputRef}
-        id={fieldName}
-        value={value}
-        checked={checked}
-        onCheckedChange={handleChange}
+        name={name}
+        ref={ref}
+        id={label}
+        checked={isChecked}
+        onCheckedChange={setChecked}
         className="bg-neutral-600 w-4 h-4 flex rounded-sm align-center justify-center shadow"
-        {...props}
+        {...rest}
       >
         <CheckboxUi.Indicator>
           <CheckIcon />
@@ -62,5 +30,7 @@ function Checkbox({ children, name, value, onChange, label, ...props }) {
     </div>
   );
 }
+
+const Checkbox = forwardRef(CheckboxComponent);
 
 export default Checkbox;

@@ -1,25 +1,26 @@
 import React from "react";
 
+const STYLE_TYPES = {
+  dark: "bg-neutral-800",
+  darken: "bg-[#121214]",
+};
+
 function InputGroup({
-  leftIcon: LeftIcon,
+  icon: Icon,
   label,
   className,
-  children,
-  containerClassName,
-  hideLabel,
   error,
+  children,
+  styleType = "darken",
 }) {
   const divClassList = ["flex flex-col mb-5 last-of-type:mb-0"];
+
   const containerClassList = [
-    "rounded bg-[#121214] h-12 flex items-center px-3 border-2 focus-within:border-[#565a85] focus-within:ease-in  focus-within:duration-300",
+    "rounded h-12 flex items-center px-3 border-2 focus-within:border-[#084551] focus-within:ease-in  focus-within:duration-300 gap-2",
   ];
 
   if (className) {
     divClassList.push(className);
-  }
-
-  if (containerClassName) {
-    containerClassList.push(containerClassName);
   }
 
   if (error) {
@@ -28,14 +29,12 @@ function InputGroup({
     containerClassList.push("border-transparent");
   }
 
+  containerClassList.push(STYLE_TYPES[styleType]);
+
   return (
     <div className={divClassList.join(" ")}>
-      {!hideLabel && label && (
-        <span className="mb-2 text-md   text-[#E1E1E6]">{label}</span>
-      )}
-
       <div className={containerClassList.join(" ")}>
-        {LeftIcon && <LeftIcon size={24} color="#7C7C8A" className="mr-2" />}
+        {Icon && <Icon size={24} color="#7C7C8A" />}
         {children}
       </div>
 

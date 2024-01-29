@@ -1,84 +1,72 @@
-import React, { useEffect, useRef, useId } from "react";
-import SelectComponent from "react-select";
-import { useField } from "@unform/core";
+import React, { forwardRef } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
+import * as SelectUI from "@radix-ui/react-select";
 
-const customStyles = {
-  control: (styles) => ({
-    ...styles,
-    backgroundColor: "transparent",
-    borderColor: "transparent !important",
-    boxShadow: "transparent",
-    outline: "none",
-    color: "white",
-  }),
-  container: (styles) => ({
-    ...styles,
-    width: "100%",
-    outline: "none",
-  }),
-  menu: (styles) => ({
-    ...styles,
-    backgroundColor: "#121214",
-    color: "white",
-  }),
-  menuList: (styles) => ({
-    ...styles,
-    "::-webkit-scrollbar": {
-      width: "4px",
-      height: "0px",
-    },
-    "::-webkit-scrollbar-track": {
-      background: "#f1f1f1",
-    },
-    "::-webkit-scrollbar-thumb": {
-      background: "#888",
-    },
-    "::-webkit-scrollbar-thumb:hover": {
-      background: "#555",
-    },
-  }),
-  option: (styles, state) => ({
-    ...styles,
-    backgroundColor: state.isFocused ? "#2274A5" : "transparent",
-  }),
-  placeholder: (styles) => ({
-    ...styles,
-    color: "#737373",
-  }),
-  singleValue: (styles) => ({
-    ...styles,
-    color: "white",
-  }),
-};
+import InputGroup from "../InputGroup";
 
-function Select({ options, name, ...rest }) {
-  const selectRef = useRef(null);
-  const { fieldName, registerField, defaultValue } = useField(name);
-
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: selectRef.current,
-      getValue: (ref) => ref.state.selectValue[0]?.label,
-      setValue: (ref, value) => {
-        ref.setValue(value || null);
-      },
-      clearValue: (ref) => {
-        ref.clearValue();
-      },
-    });
-  }, [fieldName, registerField]);
-
+function SelectComponent(
+  {
+    value,
+    onChange,
+    options,
+    label,
+    styleType,
+    className = null,
+    error = null,
+    icon = null,
+    children,
+    ...rest
+  },
+  ref
+) {
   return (
-    <SelectComponent
-      ref={selectRef}
-      options={options}
-      defaultValue={defaultValue}
-      styles={customStyles}
-      instanceId={useId()}
-      {...rest}
-    />
+    <SelectUI.Root value={value} onValueChange={onChange} {...rest}>
+      <InputGroup
+        label={label}
+        icon={icon}
+        error={error}
+        styleType={styleType}
+        className={className}
+      >
+        <SelectUI.Trigger
+          aria-label={label}
+          ref={ref}
+          className="inline-flex items-center justify-between w-full outline-none data-[placeholder]:text-neutral-500"
+        >
+          <SelectUI.Value placeholder={label} />
+
+          <SelectUI.Icon className="ml-2">
+            <ChevronDownIcon />
+          </SelectUI.Icon>
+        </SelectUI.Trigger>
+      </InputGroup>
+
+      <SelectUI.Content
+        className="shadow bg-[#121214] rounded-b w-80 bottom-0 -translate-x-[43px]"
+        position="popper"
+        sideOffset={12}
+      >
+        <SelectUI.ScrollUpButton className="flex items-center justify-center">
+          <ChevronUpIcon />
+        </SelectUI.ScrollUpButton>
+
+        <ScrollArea.Root className="w-full max-h-48" type="auto">
+          <SelectUI.Viewport className="shadow-lg max-h-48">
+            <ScrollArea.Viewport className="w-full h-full">
+              {children}
+            </ScrollArea.Viewport>
+          </SelectUI.Viewport>
+        </ScrollArea.Root>
+
+        <SelectUI.ScrollDownButton className="flex items-center justify-center text-gray-300">
+          <ChevronDownIcon />
+        </SelectUI.ScrollDownButton>
+      </SelectUI.Content>
+    </SelectUI.Root>
   );
 }
+
+const Select = forwardRef(SelectComponent);
 
 export default Select;

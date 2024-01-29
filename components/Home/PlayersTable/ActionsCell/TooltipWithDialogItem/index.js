@@ -9,7 +9,6 @@ function TooltipWithDialogItem({
   onOpenChange,
   icon: Icon,
 }) {
-  console.log(open);
   return (
     <Tooltip.Root>
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
