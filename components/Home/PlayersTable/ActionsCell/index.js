@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as SelectUI from "@radix-ui/react-select";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { format } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CheckIcon } from "@radix-ui/react-icons";
@@ -216,13 +215,12 @@ function ActionsCell({ row }) {
                 control={control}
                 name="joinedAt"
                 render={({ field: { onChange, value } }) => (
-                  <DatePicker mode="simple" date={value} onDayClick={onChange}>
-                    <Input
-                      label="JoinedAt"
-                      placeholder="Data de Recrutamento"
+                  <DatePicker>
+                    <DatePicker.Simple
+                      styleType="darken"
+                      onChange={onChange}
+                      value={value}
                       icon={Calendar}
-                      value={value ? format(value, "dd/MM/yyyy") : null}
-                      error={errors.joinedAt?.message || null}
                     />
                   </DatePicker>
                 )}

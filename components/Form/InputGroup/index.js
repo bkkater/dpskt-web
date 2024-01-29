@@ -1,9 +1,7 @@
 import React from "react";
 
-const STYLE_TYPES = {
-  dark: "bg-neutral-800",
-  darken: "bg-[#121214]",
-};
+// Config
+import { STYLE_TYPES } from "@/config/general";
 
 function InputGroup({
   icon: Icon,

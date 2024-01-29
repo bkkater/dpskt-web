@@ -18,3 +18,8 @@ export const CORPORATION_OPTIONS = [
   { label: "FBI", value: "fbi" },
   { label: "GOT", value: "got" },
 ];
+
+export const STYLE_TYPES = {
+  dark: "bg-neutral-800",
+  darken: "bg-[#121214]",
+};

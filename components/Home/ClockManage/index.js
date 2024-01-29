@@ -1,11 +1,10 @@
 import React from "react";
+import * as Yup from "yup";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { Controller, useForm } from "react-hook-form";
 import { CheckIcon } from "@radix-ui/react-icons";
-import { DatePicker as AntdDatePicker, ConfigProvider, theme } from "antd";
 import * as SelectUI from "@radix-ui/react-select";
-import locale from "antd/locale/pt_BR";
-import dateFnsGenerateConfig from "rc-picker/lib/generate/dateFns";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 // Hooks
 import { useUser } from "@/hooks/useUser";
@@ -13,14 +12,20 @@ import { useUser } from "@/hooks/useUser";
 // Components
 import Button from "@/components/Button";
 import Select from "@/components/Form/Select";
+import DatePicker from "@/components/Form/DatePicker";
 
-const DatePicker = AntdDatePicker.generatePicker(dateFnsGenerateConfig);
+const schema = Yup.object().shape({
+  player: Yup.string().required(),
+  range: Yup.array().of(Yup.date().required()).min(2).max(2),
+});
 
 function ClockManage() {
   const {
     allUsers: { data: usersData },
   } = useUser();
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, setValue } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   function handleReportSubmit(data) {
     console.log(data);
@@ -61,26 +66,24 @@ function ClockManage() {
           )}
         />
 
-        <ConfigProvider
-          locale={locale}
-          theme={{
-            algorithm: theme.darkAlgorithm,
-            token: {
-              colorPrimary: "#286f8d",
-              fontSize: "1rem",
-            },
-          }}
-        >
-          <DatePicker.RangePicker
-            className="h-12 rounded bg-neutral-800 border-transparent shadow px-3 w-64"
-            placeholder={["Data inicial", "Data final"]}
-            suffixIcon={null}
-            superNextIcon={null}
-            superPrevIcon={null}
-            getPopupContainer={(trigger) => trigger.parentElement}
-            format="DD/MM/YYYY"
-          />
-        </ConfigProvider>
+        <Controller
+          control={control}
+          name="range"
+          render={({ field: { onChange, value } }) => (
+            <DatePicker>
+              <DatePicker.Range
+                styleType="dark"
+                label="Range"
+                value={value}
+                onChange={(dates) => {
+                  setValue("range", dates);
+
+                  onChange(dates);
+                }}
+              />
+            </DatePicker>
+          )}
+        />
 
         <Button
           className="bg-[#286f8d] h-12 w-52 font-medium shadow transition-all text-[#e1e1e6] flex items-center gap-2 border-[#286f8d] hover:bg-transparent border"

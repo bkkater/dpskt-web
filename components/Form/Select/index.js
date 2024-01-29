@@ -3,12 +3,10 @@ import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as SelectUI from "@radix-ui/react-select";
 
-import InputGroup from "../InputGroup";
+// Config
+import { STYLE_TYPES } from "@/config/general";
 
-const STYLE_TYPES = {
-  dark: "bg-neutral-800",
-  darken: "bg-[#121214]",
-};
+import InputGroup from "../InputGroup";
 
 function SelectComponent(
   {
