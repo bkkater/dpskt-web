@@ -74,15 +74,15 @@ function ActionsCell({ row }) {
 
   const handleUpdateSubmit = useCallback(
     async (data) => {
-      const { coorporation, id, isAdmin, joinedAt, name, role } = data;
+      const { corporation, id, isAdmin, joinedAt, name, role } = data;
 
       await updateUserData({
         ...selectedUser,
         player: {
           ...selectedUser.player,
+          id: id.toString(),
           joinedAt,
-          coorporation,
-          id,
+          corporation,
           isAdmin,
           name,
           role,

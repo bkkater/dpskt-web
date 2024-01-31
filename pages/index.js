@@ -87,7 +87,9 @@ export default function Home() {
               className="relative grid grid-cols-2 gap-4 outline-none"
             >
               {playerClocks.length ? (
-                playerClocks.map((clock) => <ClockCard clock={clock} />)
+                playerClocks.map((clock) => (
+                  <ClockCard clock={clock} key={clock.hash} />
+                ))
               ) : (
                 <p className="text-neutral-500 py-8">
                   Nenhum registro encontrado
