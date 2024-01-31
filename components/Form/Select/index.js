@@ -6,7 +6,8 @@ import * as SelectUI from "@radix-ui/react-select";
 // Config
 import { STYLE_TYPES } from "@/config/general";
 
-import InputGroup from "../InputGroup";
+// Components
+import InputGroup from "@/components/Form/InputGroup";
 
 function SelectComponent(
   {
@@ -23,7 +24,7 @@ function SelectComponent(
   },
   ref
 ) {
-  const classList = ["shadow rounded-b w-60 bottom-0"];
+  const classList = ["shadow rounded-b w-60 bottom-0 z-50"];
 
   if (styleType) {
     classList.push(STYLE_TYPES[styleType]);
@@ -60,7 +61,7 @@ function SelectComponent(
         className={classList.join(" ")}
         position="popper"
         align="start"
-        alignOffset={icon ? -44 : -14}
+        alignOffset={icon ? -42 : -14}
         sideOffset={12}
       >
         <SelectUI.ScrollUpButton className="flex items-center justify-center">
