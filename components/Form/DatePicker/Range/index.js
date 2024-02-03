@@ -36,6 +36,7 @@ function RangePickerComponent(
         superNextIcon={null}
         superPrevIcon={null}
         getPopupContainer={(trigger) => trigger.parentElement}
+        disabledDate={(current) => current && current > new Date()}
         format="DD/MM/YYYY"
         ref={ref}
         value={value}

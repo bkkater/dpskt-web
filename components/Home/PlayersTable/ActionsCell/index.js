@@ -16,7 +16,7 @@ import {
   Suitcase,
   User,
   XCircle,
-} from "phosphor-react";
+} from "@phosphor-icons/react";
 
 // Config
 import { CORPORATION_OPTIONS, ROLE_OPTIONS } from "@/config/general";
@@ -44,21 +44,29 @@ const schema = Yup.object().shape({
 });
 
 function ActionsCell({ row }) {
-  const { user, rankPlayerUp, rankPlayerDown, updateUserData, exonerateUser } =
-    useUser();
+  const {
+    user,
+    rankPlayerUp,
+    rankPlayerDown,
+    updateUserData,
+    exonerateUser,
+    allUsers: { data: users },
+  } = useUser();
 
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
-  const selectedUser = row.original;
-  const currentRole = row.original.player.role;
+  const selectedUser = users.find(
+    ({ discordId }) => row.original.discordId === discordId
+  );
 
   const currentRoleIndex = ROLE_OPTIONS.findIndex(
-    (item) => item.label === currentRole
+    (item) => item.label === selectedUser.player.role
   );
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -94,6 +102,23 @@ function ActionsCell({ row }) {
     [selectedUser, updateUserData]
   );
 
+  const handlePlayerRank = useCallback(
+    ({ type }) => {
+      if (type === "up") {
+        const updatedRole = ROLE_OPTIONS[currentRoleIndex + 1].label;
+
+        rankPlayerUp(selectedUser, updatedRole);
+        setValue("role", updatedRole);
+      } else if (type === "down") {
+        const updatedRole = ROLE_OPTIONS[currentRoleIndex - 1].label;
+
+        rankPlayerDown(selectedUser, updatedRole);
+        setValue("role", updatedRole);
+      }
+    },
+    [currentRoleIndex, rankPlayerDown, rankPlayerUp, selectedUser, setValue]
+  );
+
   return (
     <Tooltip.Provider delayDuration={300}>
       <div className="grid grid-cols-4">
@@ -102,7 +127,7 @@ function ActionsCell({ row }) {
             iconColor="#2D8F60"
             label="Upar patente"
             icon={ArrowUp}
-            onClick={() => rankPlayerUp(selectedUser, currentRoleIndex)}
+            onClick={() => handlePlayerRank({ type: "up" })}
           />
         ) : (
           <ArrowUp size={20} className="mx-auto" color="#737373" />
@@ -113,7 +138,7 @@ function ActionsCell({ row }) {
             iconColor="#A12525"
             label="Rebaixar patente"
             icon={ArrowDown}
-            onClick={() => rankPlayerDown(selectedUser, currentRoleIndex)}
+            onClick={() => handlePlayerRank({ type: "down" })}
           />
         ) : (
           <ArrowDown className="mx-auto" size={20} color="#737373" />

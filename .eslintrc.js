@@ -24,6 +24,7 @@ module.exports = {
     "implicit-arrow-linebreak": 0,
     "operator-linebreak": 0,
     "no-underscore-dangle": 0,
+    "react/jsx-curly-newline": 0,
   },
   settings: {
     "import/resolver": {

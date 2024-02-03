@@ -23,7 +23,7 @@ export default function ClockProvider({ children }) {
   const [isLoading, setLoading] = useState(false);
   const [playerClocks, setPlayerClocks] = useState([]);
 
-  const fetchClocksByID = useCallback(async (playerId) => {
+  const fetchClocksById = useCallback(async (playerId) => {
     setLoading(true);
 
     const { data } = await getClocksById(playerId);
@@ -31,6 +31,19 @@ export default function ClockProvider({ children }) {
     setPlayerClocks(data);
     setLoading(false);
   }, []);
+
+  const fetchClocksByIdAndRange = useCallback(
+    async (playerId, range = null) => {
+      setLoading(true);
+
+      const { data } = await getClocksById(playerId, range);
+
+      setLoading(false);
+
+      return data;
+    },
+    []
+  );
 
   const storeClockIn = useCallback(async () => {
     const formattedClock = {
@@ -98,13 +111,21 @@ export default function ClockProvider({ children }) {
 
   const contextValue = useMemo(
     () => ({
+      fetchClocksById,
+      fetchClocksByIdAndRange,
       isLoading,
-      playerClocks,
-      fetchClocksByID,
       onClockAction,
       onClockDelete,
+      playerClocks,
     }),
-    [fetchClocksByID, isLoading, onClockAction, onClockDelete, playerClocks]
+    [
+      fetchClocksById,
+      fetchClocksByIdAndRange,
+      isLoading,
+      onClockAction,
+      onClockDelete,
+      playerClocks,
+    ]
   );
 
   return (

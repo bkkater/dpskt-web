@@ -9,7 +9,7 @@ import Button from "@/components/Button";
 import SktIcon from "@/components/Icons/Skt";
 
 // Resources
-import Logo from "@/resources/logo.png";
+import Logo from "@/resources/dpskt.png";
 
 export default function Login() {
   return (

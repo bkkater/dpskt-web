@@ -32,15 +32,16 @@ function SimplePickerComponent(
       <DatePickerUI
         className="h-12 bg-transparent border-transparent px-3 w-64 focus:shadow-none focus-within:shadow-none"
         placeholder="Selecione uma data"
+        format="DD/MM/YYYY"
+        getPopupContainer={(trigger) => trigger.parentElement}
+        disabledDate={(current) => current && current > new Date()}
+        ref={ref}
+        value={new Date(value)}
+        onChange={onChange}
         suffixIcon={null}
         superNextIcon={null}
         superPrevIcon={null}
         showToday={false}
-        getPopupContainer={(trigger) => trigger.parentElement}
-        format="DD/MM/YYYY"
-        ref={ref}
-        value={new Date(value)}
-        onChange={onChange}
         {...rest}
       />
     </InputGroup>

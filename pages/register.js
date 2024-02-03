@@ -3,10 +3,15 @@ import * as SelectUI from "@radix-ui/react-select";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { getSession, useSession } from "next-auth/react";
-import { IdentificationCard, PoliceCar, Suitcase, User } from "phosphor-react";
 import { Controller, useForm } from "react-hook-form";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  IdentificationCard,
+  PoliceCar,
+  Suitcase,
+  User,
+} from "@phosphor-icons/react";
 
 // Config
 import { CORPORATION_OPTIONS, ROLE_OPTIONS } from "@/config/general";

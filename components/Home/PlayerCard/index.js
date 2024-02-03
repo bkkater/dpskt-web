@@ -1,13 +1,17 @@
 import React from "react";
 import Image from "next/image";
-import { Clipboard } from "phosphor-react";
+import { Clipboard } from "@phosphor-icons/react";
 
 // Hooks
 import { useClock } from "@/hooks/useClock";
 import { useUser } from "@/hooks/useUser";
 
 // Resources
-import Logo from "@/resources/logo.png";
+import DPLogo from "@/resources/dpskt.png";
+import GOTLogo from "@/resources/got.png";
+
+// Config
+import { CORPORATION_OPTIONS } from "@/config/general";
 
 // Components
 import Button from "@/components/Button";
@@ -26,7 +30,16 @@ export default function PlayerCard() {
 
   return (
     <div className="bg-[#202024] bg-[url('../resources/bg-texture.png')] w-full rounded p-8 flex gap-16 border-2 border-[#29292E]">
-      <Image src={Logo} width={120} alt="DPSKT" priority />
+      <Image
+        src={
+          user.player.corporation === CORPORATION_OPTIONS[2].label
+            ? GOTLogo
+            : DPLogo
+        }
+        width={120}
+        alt="DPSKT"
+        priority
+      />
 
       <div className="flex flex-col text-center justify-center">
         <span className="font-bold">{user.player.role}</span>
@@ -41,7 +54,7 @@ export default function PlayerCard() {
         {user.player.statusClock ? "Fechar Ponto" : "Abrir Ponto"}
       </Button>
 
-      <div className="flex self-center align-center justify-end flex-1">
+      <div className="flex self-center align-center justify-end flex-1 gap-2">
         <div className={iconClassName.join(" ")} />
         {user.player.statusClock ? "Em serviço" : "Fora de serviço"}
       </div>

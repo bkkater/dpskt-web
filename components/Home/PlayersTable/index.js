@@ -49,6 +49,12 @@ const columns = [
   columnHelper.accessor("player.id", {
     cell: (info) => info.renderValue(),
     header: () => "ID",
+    sortingFn: (compareRow, baseRow, columnId) => {
+      const baseNum = baseRow.getValue(columnId);
+      const compareNum = compareRow.getValue(columnId);
+
+      return baseNum - compareNum;
+    },
     size: 80,
   }),
   columnHelper.accessor("player.name", {
@@ -95,8 +101,10 @@ export default function PlayersTable() {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
-    data: allUsers.data,
     columns,
+    data: allUsers.data,
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -104,26 +112,30 @@ export default function PlayersTable() {
       sorting,
       globalFilter,
     },
-    onGlobalFilterChange: setGlobalFilter,
-    onSortingChange: setSorting,
   });
 
   return (
-    <>
+    <div className="mt-12">
+      <h1 className="text-2xl text-start mb-2">Gerenciar usuários</h1>
+
+      <p className="text-neutral-500 text-start">
+        Altere informações, cargos ou exonere players cadastrados
+      </p>
+
       {!isLoading && (
         <>
-          <div className="flex align-center gap-4 py-8">
+          <div className="flex align-center gap-4 mt-12 mb-8">
             {allUsers && (
               <>
                 <p className="text-neutral-400">
-                  Total de players:
+                  Usuários cadastrados:
                   <b className="text-neutral-300 ml-2">
                     {allUsers.totalPlayers}
                   </b>
                 </p>
                 <span className="text-neutral-300">·</span>
                 <p className="text-neutral-400">
-                  Total de players patrulhando:
+                  Players patrulhando:
                   <b className="text-neutral-300 ml-2">
                     {allUsers.totalClocks}
                   </b>
@@ -145,7 +157,7 @@ export default function PlayersTable() {
             />
           </div>
 
-          <table className="min-w-full mt-4">
+          <table className="min-w-full mt-3">
             <thead className="bg-neutral-800 rounded">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -194,7 +206,8 @@ export default function PlayersTable() {
           </table>
         </>
       )}
+
       {isLoading && <Loading />}
-    </>
+    </div>
   );
 }

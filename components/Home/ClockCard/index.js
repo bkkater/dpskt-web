@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React from "react";
-import { Trash } from "phosphor-react";
+import { Trash } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 
@@ -14,7 +14,7 @@ export default function ClockCard({ clock: { startAt, endAt, hash } }) {
   const { onClockDelete } = useClock();
 
   return (
-    <div className="rounded p-8 flex justify-between bg-[#0a0a0a] hover:bg-[#0e0e0e] hover:border-[#286f8d] border-2 border-[#29292E] transition-colors mt-8">
+    <div className="rounded p-8 flex justify-between bg-[#0a0a0a] hover:bg-[#0e0e0e] hover:border-[#286f8d] border-2 border-[#29292E] transition-colors">
       <div className="flex flex-col justify-center">
         <span className="font-bold">Entrada</span>
 

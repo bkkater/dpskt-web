@@ -1,68 +1,91 @@
-import React from "react";
+/* eslint-disable max-len */
+import React, { useMemo, useState } from "react";
 import * as Yup from "yup";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { Controller, useForm } from "react-hook-form";
-import { CheckIcon } from "@radix-ui/react-icons";
-import * as SelectUI from "@radix-ui/react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Hooks
 import { useUser } from "@/hooks/useUser";
+import { useClock } from "@/hooks/useClock";
 
 // Components
 import Button from "@/components/Button";
-import Select from "@/components/Form/Select";
 import DatePicker from "@/components/Form/DatePicker";
+import ComboBox from "@/components/Home/ClockManage/ComboBox";
+import ClockCard from "@/components/Home/ClockCard";
+import PlayerResume from "./PlayerResume";
 
 const schema = Yup.object().shape({
-  player: Yup.string().required(),
-  range: Yup.array().of(Yup.date().required()).min(2).max(2),
+  player: Yup.object()
+    .shape({
+      label: Yup.string().required(),
+      value: Yup.object().required(),
+    })
+    .required(),
+  range: Yup.mixed(),
 });
 
 function ClockManage() {
+  const [clocks, setClocks] = useState([]);
+  const { fetchClocksByIdAndRange } = useClock();
   const {
     allUsers: { data: usersData },
   } = useUser();
-  const { handleSubmit, control, setValue } = useForm({
+
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    setValue,
+    formState: { isSubmitSuccessful },
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
-  function handleReportSubmit(data) {
-    console.log(data);
+  async function handleReportSubmit(formData) {
+    const {
+      player: { value: player },
+      range,
+    } = formData;
+
+    const dateRange = range ? { startDate: range[0], endDate: range[1] } : null;
+    const data = await fetchClocksByIdAndRange(player.id, dateRange);
+
+    setClocks(data);
   }
 
+  const options = useMemo(() => {
+    const formattedOptions = usersData.map(({ player }) => ({
+      label: `${player.id} · ${player.name}`,
+      value: player,
+    }));
+
+    return formattedOptions;
+  }, [usersData]);
+
   return (
-    <>
+    <div className="mt-12">
+      <h1 className="text-2xl text-start mb-2">Gerenciar pontos</h1>
+
+      <p className="text-neutral-500 text-start">
+        Obtenha um relatório detalhado dos pontos de cada player
+      </p>
+
       <form
         onSubmit={handleSubmit(handleReportSubmit)}
-        className="flex gap-8 py-8 relative"
+        className="flex gap-8 relative mt-12"
       >
         <Controller
           control={control}
           name="player"
           render={({ field: { onChange, value } }) => (
-            <Select
-              label="Selecione um player"
-              value={value}
+            <ComboBox
+              label="Player"
+              options={options}
               onChange={onChange}
-              styleType="dark"
-              className="w-80"
-            >
-              {usersData.map(({ player }) => (
-                <SelectUI.Item
-                  value={player.id}
-                  className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-700 last:border-transparent"
-                  key={player.id}
-                >
-                  <div className="flex items-center">
-                    <SelectUI.ItemText>{`${player.name} | ${player.id}`}</SelectUI.ItemText>
-                    <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
-                      <CheckIcon />
-                    </SelectUI.ItemIndicator>
-                  </div>
-                </SelectUI.Item>
-              ))}
-            </Select>
+              value={value || null}
+            />
           )}
         />
 
@@ -86,7 +109,7 @@ function ClockManage() {
         />
 
         <Button
-          className="bg-[#286f8d] h-12 w-52 font-medium shadow transition-all text-[#e1e1e6] flex items-center gap-2 border-[#286f8d] hover:bg-transparent border"
+          className="bg-[#286f8d] h-12 font-medium shadow transition-all text-[#e1e1e6] flex items-center gap-2 border-[#286f8d] hover:bg-transparent border w-60"
           type="submit"
         >
           <IoDocumentsOutline size={20} />
@@ -94,8 +117,24 @@ function ClockManage() {
         </Button>
       </form>
 
-      <p className="text-neutral-500 mt-12">Nenhum relatório encontrado</p>
-    </>
+      <div className="flex gap-16">
+        {!!clocks.length && (
+          <PlayerResume player={getValues("player").value} clocks={clocks} />
+        )}
+
+        {isSubmitSuccessful && !clocks?.length && (
+          <p className="text-neutral-500 mt-12">Nenhum relatório encontrado</p>
+        )}
+
+        {!!clocks?.length && (
+          <div className="grid grid-cols-2 gap-4 mt-8 w-full auto-rows-min">
+            {clocks.map((clock) => (
+              <ClockCard clock={clock} key={clock.hash} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

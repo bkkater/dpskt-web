@@ -1,9 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 
-// Config
-import { ROLE_OPTIONS } from "@/config/general";
-
 // Services;
 import {
   deleteUser,
@@ -27,7 +24,7 @@ export default function UserProvider({ children }) {
   const router = useRouter();
 
   const updateState = useCallback(
-    (updatedUser, selectedUser) => {
+    ({ updatedUser }) => {
       const userIndex = allUsers.data.findIndex(
         ({ discordId }) => discordId === updatedUser.discordId
       );
@@ -46,7 +43,7 @@ export default function UserProvider({ children }) {
         return { ...newState, data: updatedData };
       });
 
-      if (!selectedUser || selectedUser.discordId === user.discordId) {
+      if (updatedUser.discordId === user.discordId) {
         setUser(updatedUser);
       }
     },
@@ -100,36 +97,36 @@ export default function UserProvider({ children }) {
   }, []);
 
   const rankPlayerUp = useCallback(
-    async (selectedUser, roleIndex) => {
+    async (selectedUser, updatedRole) => {
       const updatedUser = {
         ...selectedUser,
         player: {
           ...selectedUser.player,
-          role: ROLE_OPTIONS[roleIndex + 1].label,
+          role: updatedRole,
         },
       };
 
       await updateUser(updatedUser);
 
-      updateState(updatedUser, selectedUser);
+      updateState({ updatedUser });
     },
     [updateState]
   );
 
   const rankPlayerDown = useCallback(
-    async (selectedUser, roleIndex) => {
+    async (selectedUser, updatedRole) => {
       const updatedUser = {
         ...selectedUser,
         player: {
           ...selectedUser.player,
-          role: ROLE_OPTIONS[roleIndex - 1].label,
+          role: updatedRole,
         },
       };
 
       try {
         await updateUser(updatedUser);
 
-        updateState(updatedUser, selectedUser);
+        updateState({ updatedUser });
       } catch (err) {
         console.log(err.response);
       }
@@ -160,7 +157,7 @@ export default function UserProvider({ children }) {
     async (updatedUser) => {
       await updateUser(updatedUser);
 
-      updateState(updatedUser);
+      updateState({ updatedUser });
     },
     [updateState]
   );

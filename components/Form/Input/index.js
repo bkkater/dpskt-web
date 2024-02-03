@@ -6,7 +6,7 @@ function InputComponent(
   ref
 ) {
   const classList = [
-    "w-full bg-[#121214] active:bg-[#121214] outline-none placeholder:text-neutral-500 text-[#E1E1E6]",
+    "w-full bg-transparent outline-none placeholder:text-neutral-500 text-[#E1E1E6]",
   ];
 
   if (className) {

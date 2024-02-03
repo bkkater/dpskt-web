@@ -15,7 +15,7 @@ export default function Page({ className, children, pageTitle }) {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-thumb-rounded overflow-auto scrollbar-track-neutral-700 scrollbar-rounded-large">
       <Head>
         <title>{`DPSKT - ${pageTitle}`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

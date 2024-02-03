@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
-import { Bell, Power } from "phosphor-react";
+import { Bell, Power } from "@phosphor-icons/react";
 
 // Components
 import Button from "@/components/Button";
@@ -35,12 +35,15 @@ export default function Header() {
             </div>
           </div>
 
-          <Button onClick={() => signOut("discord")}>
+          <Button className="hover:scale-105 transition-transform rounded hover:bg-neutral-800 p-2 shadow-none">
             <Bell size={32} className="hover:scale-105 transition-transform" />
           </Button>
 
-          <Button onClick={() => signOut("discord")}>
-            <Power size={32} className="hover:scale-105 transition-transform" />
+          <Button
+            onClick={() => signOut("discord")}
+            className="hover:scale-105 transition-transform rounded hover:bg-neutral-800 p-2 shadow-none"
+          >
+            <Power size={32} />
           </Button>
         </div>
       </div>
