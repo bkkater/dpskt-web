@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import * as SelectUI from "@radix-ui/react-select";
 
 // Config
@@ -6,7 +7,6 @@ import { STYLE_TYPES } from "@/config/general";
 
 // Components
 import InputGroup from "@/components/Form/InputGroup";
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
 
 function SelectComponent(
   {

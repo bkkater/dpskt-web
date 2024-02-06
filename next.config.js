@@ -4,6 +4,11 @@ const nextConfig = {
   images: {
     domains: ["cdn.discordapp.com"],
   },
+  modularizeImports: {
+    "@phosphor-icons/react": {
+      transform: "@phosphor-icons/react/{{member}}",
+    },
+  },
 };
 
 module.exports = nextConfig;
