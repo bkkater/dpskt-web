@@ -1,6 +1,6 @@
 import React from "react";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { Check } from "@phosphor-icons/react";
+import { Check } from "@phosphor-icons/react/dist/ssr";
 
 function CheckboxCell({ getValue }) {
   return (

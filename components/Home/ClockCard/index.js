@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React from "react";
-import { Trash } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react/dist/ssr";
 import { format } from "date-fns";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 

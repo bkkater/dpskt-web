@@ -11,7 +11,7 @@ import {
   PoliceCar,
   Suitcase,
   User,
-} from "@phosphor-icons/react";
+} from "@phosphor-icons/react/dist/ssr";
 
 // Config
 import { CORPORATION_OPTIONS, ROLE_OPTIONS } from "@/config/general";

@@ -9,7 +9,7 @@ import {
   Notification,
   Users,
   Warning,
-} from "@phosphor-icons/react";
+} from "@phosphor-icons/react/dist/ssr";
 import * as Tabs from "@radix-ui/react-tabs";
 
 // Hooks

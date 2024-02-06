@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Clipboard } from "@phosphor-icons/react";
+import { Clipboard } from "@phosphor-icons/react/dist/ssr";
 
 // Hooks
 import { useClock } from "@/hooks/useClock";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Minus } from "@phosphor-icons/react";
+import { Plus, Minus } from "@phosphor-icons/react/dist/ssr";
 
 // Components
 import Input from "@/components/Form/Input";

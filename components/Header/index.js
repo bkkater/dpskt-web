@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
-import { Bell, Power } from "@phosphor-icons/react";
+import { Bell, Power } from "@phosphor-icons/react/dist/ssr";
 
 // Components
 import Button from "@/components/Button";

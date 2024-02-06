@@ -1,7 +1,7 @@
 /* eslint-disable function-paren-newline */
 import React, { forwardRef, useMemo, useState } from "react";
 import { Combobox } from "@headlessui/react";
-import { Check, CaretUpDown } from "@phosphor-icons/react";
+import { Check, CaretUpDown } from "@phosphor-icons/react/dist/ssr";
 
 function ComboBoxComponent(
   { label, value, onChange, error, options, ...rest },
