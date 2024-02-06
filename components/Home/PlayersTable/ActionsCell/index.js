@@ -50,7 +50,7 @@ function ActionsCell({ row }) {
     rankPlayerDown,
     updateUserData,
     exonerateUser,
-    allUsers: { data: users },
+    users: { data: users },
   } = useUser();
 
   const [updateModalOpen, setUpdateModalOpen] = useState(false);

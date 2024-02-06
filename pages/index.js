@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { getSession } from "next-auth/react";
 import { Divider } from "antd";
+import * as Tabs from "@radix-ui/react-tabs";
 import {
   ArrowSquareOut,
   BookOpenText,
@@ -10,7 +11,10 @@ import {
   Users,
   Warning,
 } from "@phosphor-icons/react/dist/ssr";
-import * as Tabs from "@radix-ui/react-tabs";
+
+// Services
+import { getAllUsers, getUser } from "@/services/user";
+import { getClocksById } from "@/services/clock";
 
 // Hooks
 import { useUser } from "@/hooks/useUser";
@@ -24,8 +28,6 @@ import Loading from "@/components/Loading";
 import ClockCard from "@/components/Home/ClockCard";
 import PlayersTable from "@/components/Home/PlayersTable";
 import ClockManage from "@/components/Home/ClockManage";
-import { getAllUsers, getUser } from "@/services/user";
-import { getClocksById } from "@/services/clock";
 
 export default function Home({ user, clocks, allUsers }) {
   const { isLoading, setUser, setUsers } = useUser();
