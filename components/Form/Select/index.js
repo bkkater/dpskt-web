@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
+import { CaretDown, CaretUp } from "phosphor-react";
 import * as SelectUI from "@radix-ui/react-select";
-import { CaretDown, CaretUp } from "@phosphor-icons/react/dist/ssr";
 
 // Config
 import { STYLE_TYPES } from "@/config/general";

@@ -4,13 +4,13 @@ import { Divider } from "antd";
 import * as Tabs from "@radix-ui/react-tabs";
 import {
   ArrowSquareOut,
-  BookOpenText,
+  BookOpen,
   HouseLine,
   ListMagnifyingGlass,
   Notification,
   Users,
   Warning,
-} from "@phosphor-icons/react/dist/ssr";
+} from "phosphor-react";
 
 // Services
 import { getAllUsers, getUser } from "@/services/user";
@@ -89,7 +89,7 @@ export default function Home({ user, clocks, allUsers }) {
                 </Tabs.Trigger>
 
                 <Tabs.Trigger value="clockManage" className={tabClassName}>
-                  <BookOpenText className="flex self-center" />
+                  <BookOpen className="flex self-center" />
                   Relatórios
                 </Tabs.Trigger>
 

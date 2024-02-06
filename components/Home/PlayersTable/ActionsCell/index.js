@@ -16,7 +16,7 @@ import {
   Suitcase,
   User,
   XCircle,
-} from "@phosphor-icons/react";
+} from "phosphor-react";
 
 // Config
 import { CORPORATION_OPTIONS, ROLE_OPTIONS } from "@/config/general";

@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import * as CheckboxUi from "@radix-ui/react-checkbox";
-import { Check } from "@phosphor-icons/react/dist/ssr";
+import { Check } from "phosphor-react";
 
 function CheckboxComponent(
   { name, label, className, checked = false, ...rest },

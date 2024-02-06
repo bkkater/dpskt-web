@@ -4,9 +4,6 @@ const nextConfig = {
   images: {
     domains: ["cdn.discordapp.com"],
   },
-  experimental: {
-    optimizePackageImports: ["@phosphor-icons/react"],
-  },
 };
 
 module.exports = nextConfig;
