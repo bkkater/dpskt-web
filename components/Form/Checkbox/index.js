@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from "react";
-import { CheckIcon } from "@radix-ui/react-icons";
 import * as CheckboxUi from "@radix-ui/react-checkbox";
+import { Check } from "@phosphor-icons/react";
 
 function CheckboxComponent(
   { name, label, className, checked = false, ...rest },
@@ -20,7 +20,7 @@ function CheckboxComponent(
         {...rest}
       >
         <CheckboxUi.Indicator>
-          <CheckIcon />
+          <Check />
         </CheckboxUi.Indicator>
       </CheckboxUi.Root>
 

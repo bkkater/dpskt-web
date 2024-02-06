@@ -1,14 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/router";
 
 // Services;
-import {
-  deleteUser,
-  getAllUsers,
-  getUser,
-  storeUser,
-  updateUser,
-} from "@/services/user";
+import { deleteUser, storeUser, updateUser } from "@/services/user";
 
 export const UserContext = React.createContext({});
 
@@ -20,8 +13,6 @@ export default function UserProvider({ children }) {
     totalPlayers: null,
     totalClocks: null,
   });
-
-  const router = useRouter();
 
   const updateState = useCallback(
     ({ updatedUser }) => {
@@ -50,37 +41,12 @@ export default function UserProvider({ children }) {
     [allUsers.data, user]
   );
 
-  const fetchUser = useCallback(
-    async (discordId) => {
-      try {
-        setLoading(true);
-
-        const { data } = await getUser(discordId);
-        setUser(data);
-
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        router.push("/register");
-      }
-    },
-    [router]
-  );
-
-  const fetchAllUsers = useCallback(async () => {
-    setLoading(true);
-
-    const {
-      data: { users, entries, onlineClocks },
-    } = await getAllUsers();
-
+  const setUsers = useCallback(async ({ users, entries, onlineClocks }) => {
     setAllUsers({
       data: users,
       totalPlayers: entries,
       totalClocks: onlineClocks,
     });
-
-    setLoading(false);
   }, []);
 
   const registerUser = useCallback(async (discordId, data) => {
@@ -165,26 +131,25 @@ export default function UserProvider({ children }) {
   const contextValue = useMemo(
     () => ({
       user,
-      fetchUser,
-      fetchAllUsers,
+      setUser,
+      users: allUsers,
+      setUsers,
       registerUser,
       rankPlayerUp,
       rankPlayerDown,
       exonerateUser,
       updateUserData,
-      allUsers,
       isLoading,
     }),
     [
       user,
-      fetchUser,
-      fetchAllUsers,
+      allUsers,
+      setUsers,
       registerUser,
       rankPlayerUp,
       rankPlayerDown,
       exonerateUser,
       updateUserData,
-      allUsers,
       isLoading,
     ]
   );

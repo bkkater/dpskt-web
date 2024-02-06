@@ -95,14 +95,14 @@ const columns = [
 ];
 
 export default function PlayersTable() {
-  const { allUsers, isLoading } = useUser();
+  const { users, isLoading } = useUser();
 
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
     columns,
-    data: allUsers.data,
+    data: users.data || [],
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -125,20 +125,16 @@ export default function PlayersTable() {
       {!isLoading && (
         <>
           <div className="flex align-center gap-4 mt-12 mb-8">
-            {allUsers && (
+            {users && (
               <>
                 <p className="text-neutral-400">
                   Usuários cadastrados:
-                  <b className="text-neutral-300 ml-2">
-                    {allUsers.totalPlayers}
-                  </b>
+                  <b className="text-neutral-300 ml-2">{users.totalPlayers}</b>
                 </p>
                 <span className="text-neutral-300">·</span>
                 <p className="text-neutral-400">
                   Players patrulhando:
-                  <b className="text-neutral-300 ml-2">
-                    {allUsers.totalClocks}
-                  </b>
+                  <b className="text-neutral-300 ml-2">{users.totalClocks}</b>
                 </p>
               </>
             )}

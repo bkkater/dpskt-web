@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
-import { getSession, useSession } from "next-auth/react";
-import * as Tabs from "@radix-ui/react-tabs";
+import { getSession } from "next-auth/react";
+import { Divider } from "antd";
 import {
   ArrowSquareOut,
   BookOpenText,
   HouseLine,
+  ListMagnifyingGlass,
   Notification,
   Users,
   Warning,
 } from "@phosphor-icons/react";
+import * as Tabs from "@radix-ui/react-tabs";
 
 // Hooks
 import { useUser } from "@/hooks/useUser";
@@ -22,27 +24,28 @@ import Loading from "@/components/Loading";
 import ClockCard from "@/components/Home/ClockCard";
 import PlayersTable from "@/components/Home/PlayersTable";
 import ClockManage from "@/components/Home/ClockManage";
+import { getAllUsers, getUser } from "@/services/user";
+import { getClocksById } from "@/services/clock";
 
-export default function Home() {
-  const { data: session } = useSession();
-  const { isLoading, fetchUser, user, fetchAllUsers } = useUser();
-  const { fetchClocksById, playerClocks } = useClock();
+export default function Home({ user, clocks, allUsers }) {
+  const { isLoading, setUser, setUsers } = useUser();
+  const { setPlayerClocks } = useClock();
 
   useEffect(() => {
-    if (!user) {
-      fetchUser(session.user.id);
+    if (user) {
+      setUser(user);
+
+      if (user?.player.isAdmin) {
+        setUsers(allUsers);
+      }
     }
-  }, [fetchUser, session.user.id, user]);
+  }, [allUsers, setUser, setUsers, user]);
 
   useEffect(() => {
-    if (user?.player.id) {
-      fetchClocksById(user.player.id);
+    if (clocks) {
+      setPlayerClocks(clocks);
     }
-  }, [fetchClocksById, user]);
-
-  useEffect(() => {
-    fetchAllUsers();
-  }, [fetchAllUsers]);
+  }, [clocks, setPlayerClocks]);
 
   const tabClassName =
     "p-3 w-60 data-[state=active]:border-[#286f8d] data-[state=active]:border-b flex align-end justify-center gap-2";
@@ -57,12 +60,12 @@ export default function Home() {
               <span className="font-bold ml-2">{user.player.name}</span>
             </h2>
 
-            <Button className="border-[#5865F2] border flex items-center font-medium w-52 h-12 transition-transform hover:scale-105 ml-auto">
+            <Button className="border-[#5865F2] border items-center font-medium w-52 h-12 transition-transform hover:scale-105 ml-auto hidden md:flex">
               Ir para servidor
               <ArrowSquareOut className="ml-2" size={18} />
             </Button>
 
-            <Button className="border-[#286f8d] border flex items-center font-medium w-52 h-12 transition-transform hover:scale-105">
+            <Button className="border-[#286f8d] border items-center font-medium w-52 h-12 transition-transform hover:scale-105 hidden md:flex">
               <Warning className="mr-2" size={18} />
               Comunicar problema
             </Button>
@@ -99,20 +102,23 @@ export default function Home() {
               <div className="mt-12">
                 <h1 className="text-2xl text-start mb-2">Meus pontos</h1>
 
-                <p className="text-neutral-500 text-start">
+                <p className="text-neutral-500 col-span-full">
                   Aqui você vai poder visualizar e gerenciar seus pontos
                   registrados no sistema
                 </p>
 
-                {playerClocks.length ? (
-                  <div className="grid grid-cols-2 gap-4 py-8">
-                    {playerClocks.map((clock) => (
+                <Divider className="w-full border-[#1e1e22] mb-0" />
+
+                {clocks.length ? (
+                  <div className="grid xl:grid-cols-2 grid-cols-1 gap-4 py-8">
+                    {clocks.map((clock) => (
                       <ClockCard clock={clock} key={clock.hash} />
                     ))}
                   </div>
                 ) : (
-                  <p className="text-neutral-500 mt-12">
-                    Nenhum registro encontrado
+                  <p className="mt-12 flex gap-2 align-center leading-tight  text-neutral-400">
+                    <ListMagnifyingGlass size={22} />
+                    Nenhum registro encontrado...
                   </p>
                 )}
               </div>
@@ -144,6 +150,27 @@ export default function Home() {
   );
 }
 
+function handleRedirect(error) {
+  if (error.response?.status === 404) {
+    return { destination: "/register" };
+  }
+
+  return { destination: "/404" };
+}
+
+async function fetchData(sessionUserId) {
+  const { data: user } = await getUser(sessionUserId);
+  const { data: clocks } = await getClocksById(user.player.id);
+  let allUsers = null;
+
+  if (user.player.isAdmin) {
+    const { data: usersData } = await getAllUsers();
+    allUsers = usersData;
+  }
+
+  return { user, clocks, allUsers };
+}
+
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
 
@@ -156,9 +183,18 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  return {
-    props: {
-      session,
-    },
-  };
+  try {
+    const { user, clocks, allUsers } = await fetchData(session.user.id);
+
+    return {
+      props: {
+        session,
+        user,
+        clocks,
+        allUsers,
+      },
+    };
+  } catch (error) {
+    return { redirect: handleRedirect(error) };
+  }
 };

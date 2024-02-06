@@ -14,7 +14,7 @@ export default function Header() {
     <header className="bg-[#1B1B1E] border-b border-[#29292E] ">
       <div className="h-28 md:container flex items-center justify-between md:mx-auto md:w-10/12 lg:8/12 md:px-0 px-5 ">
         <Link href="/" className="flex items-center">
-          <h1 className="text-4xl">DPSKT</h1>
+          <h1 className="text-4xl text-white">DPSKT</h1>
         </Link>
 
         <div className="flex items-center gap-8">

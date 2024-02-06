@@ -1,6 +1,4 @@
 import React, { forwardRef } from "react";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as SelectUI from "@radix-ui/react-select";
 
 // Config
@@ -8,6 +6,7 @@ import { STYLE_TYPES } from "@/config/general";
 
 // Components
 import InputGroup from "@/components/Form/InputGroup";
+import { CaretDown, CaretUp } from "@phosphor-icons/react";
 
 function SelectComponent(
   {
@@ -52,7 +51,7 @@ function SelectComponent(
           <SelectUI.Value placeholder={label} />
 
           <SelectUI.Icon className="ml-2">
-            <ChevronDownIcon />
+            <CaretDown />
           </SelectUI.Icon>
         </SelectUI.Trigger>
       </InputGroup>
@@ -65,19 +64,15 @@ function SelectComponent(
         sideOffset={12}
       >
         <SelectUI.ScrollUpButton className="flex items-center justify-center">
-          <ChevronUpIcon />
+          <CaretUp />
         </SelectUI.ScrollUpButton>
 
-        <ScrollArea.Root className="w-full max-h-48" type="auto">
-          <SelectUI.Viewport className="shadow-lg max-h-48">
-            <ScrollArea.Viewport className="w-full h-full">
-              {children}
-            </ScrollArea.Viewport>
-          </SelectUI.Viewport>
-        </ScrollArea.Root>
+        <SelectUI.Viewport className="shadow-lg max-h-48">
+          {children}
+        </SelectUI.Viewport>
 
         <SelectUI.ScrollDownButton className="flex items-center justify-center text-gray-300">
-          <ChevronDownIcon />
+          <CaretDown />
         </SelectUI.ScrollDownButton>
       </SelectUI.Content>
     </SelectUI.Root>

@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import * as Yup from "yup";
-import { IoDocumentsOutline } from "react-icons/io5";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -10,11 +9,10 @@ import { useUser } from "@/hooks/useUser";
 import { useClock } from "@/hooks/useClock";
 
 // Components
-import Button from "@/components/Button";
 import DatePicker from "@/components/Form/DatePicker";
 import ComboBox from "@/components/Home/ClockManage/ComboBox";
 import ClockCard from "@/components/Home/ClockCard";
-import PlayerResume from "./PlayerResume";
+import PlayerResume from "@/components/Home/ClockManage/PlayerResume";
 
 const schema = Yup.object().shape({
   player: Yup.object()
@@ -30,7 +28,7 @@ function ClockManage() {
   const [clocks, setClocks] = useState([]);
   const { fetchClocksByIdAndRange } = useClock();
   const {
-    allUsers: { data: usersData },
+    users: { data: usersData },
   } = useUser();
 
   const {
@@ -38,22 +36,29 @@ function ClockManage() {
     control,
     getValues,
     setValue,
-    formState: { isSubmitSuccessful },
+    watch,
+    formState: { isSubmitSuccessful, isDirty, isValid },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  async function handleReportSubmit(formData) {
-    const {
-      player: { value: player },
-      range,
-    } = formData;
+  const handleReportSubmit = useCallback(
+    async (formData) => {
+      const {
+        player: { value: player },
+        range,
+      } = formData;
 
-    const dateRange = range ? { startDate: range[0], endDate: range[1] } : null;
-    const data = await fetchClocksByIdAndRange(player.id, dateRange);
+      const dateRange = range
+        ? { startDate: range[0], endDate: range[1] }
+        : null;
 
-    setClocks(data);
-  }
+      const data = await fetchClocksByIdAndRange(player.id, dateRange);
+
+      setClocks(data);
+    },
+    [fetchClocksByIdAndRange]
+  );
 
   const options = useMemo(() => {
     const formattedOptions = usersData.map(({ player }) => ({
@@ -63,6 +68,12 @@ function ClockManage() {
 
     return formattedOptions;
   }, [usersData]);
+
+  useEffect(() => {
+    const subscription = watch(handleSubmit(handleReportSubmit));
+
+    return () => subscription.unsubscribe();
+  }, [handleReportSubmit, handleSubmit, watch]);
 
   return (
     <div className="mt-12">
@@ -107,18 +118,10 @@ function ClockManage() {
             </DatePicker>
           )}
         />
-
-        <Button
-          className="bg-[#286f8d] h-12 font-medium shadow transition-all text-[#e1e1e6] flex items-center gap-2 border-[#286f8d] hover:bg-transparent border w-60"
-          type="submit"
-        >
-          <IoDocumentsOutline size={20} />
-          Gerar Relatório
-        </Button>
       </form>
 
-      <div className="flex gap-16">
-        {!!clocks.length && (
+      <div className="flex gap-8">
+        {isDirty && isValid && (
           <PlayerResume player={getValues("player").value} clocks={clocks} />
         )}
 

@@ -5,11 +5,11 @@ import * as SelectUI from "@radix-ui/react-select";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CheckIcon } from "@radix-ui/react-icons";
 import {
   ArrowDown,
   ArrowUp,
   Calendar,
+  Check,
   Gear,
   IdentificationCard,
   PoliceCar,
@@ -198,7 +198,7 @@ function ActionsCell({ row }) {
                         <div className="flex items-center">
                           <SelectUI.ItemText>{option.label}</SelectUI.ItemText>
                           <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
-                            <CheckIcon />
+                            <Check />
                           </SelectUI.ItemIndicator>
                         </div>
                       </SelectUI.Item>
@@ -227,7 +227,7 @@ function ActionsCell({ row }) {
                         <div className="flex items-center">
                           <SelectUI.ItemText>{option.label}</SelectUI.ItemText>
                           <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
-                            <CheckIcon />
+                            <Check />
                           </SelectUI.ItemIndicator>
                         </div>
                       </SelectUI.Item>

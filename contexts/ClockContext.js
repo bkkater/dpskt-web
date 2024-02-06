@@ -23,15 +23,6 @@ export default function ClockProvider({ children }) {
   const [isLoading, setLoading] = useState(false);
   const [playerClocks, setPlayerClocks] = useState([]);
 
-  const fetchClocksById = useCallback(async (playerId) => {
-    setLoading(true);
-
-    const { data } = await getClocksById(playerId);
-
-    setPlayerClocks(data);
-    setLoading(false);
-  }, []);
-
   const fetchClocksByIdAndRange = useCallback(
     async (playerId, range = null) => {
       setLoading(true);
@@ -46,9 +37,11 @@ export default function ClockProvider({ children }) {
   );
 
   const storeClockIn = useCallback(async () => {
+    const currentDate = new Date(Date.now());
+
     const formattedClock = {
       userId: user._id,
-      startAt: new Date(Date.now()),
+      startAt: currentDate,
       hash: uuidV4(),
     };
 
@@ -65,7 +58,7 @@ export default function ClockProvider({ children }) {
         statusClock: true,
       },
     });
-  }, [updateUserData, user]);
+  }, [setPlayerClocks, updateUserData, user]);
 
   const storeClockOut = useCallback(async () => {
     const currentDate = new Date(Date.now());
@@ -91,7 +84,7 @@ export default function ClockProvider({ children }) {
         statusClock: false,
       },
     });
-  }, [playerClocks, updateUserData, user]);
+  }, [playerClocks, setPlayerClocks, updateUserData, user]);
 
   const onClockAction = useCallback(async () => {
     if (!user.player.statusClock) {
@@ -101,30 +94,33 @@ export default function ClockProvider({ children }) {
     }
   }, [storeClockIn, storeClockOut, user]);
 
-  const onClockDelete = useCallback(async (itemHash) => {
-    await deleteClock(itemHash);
+  const onClockDelete = useCallback(
+    async (itemHash) => {
+      await deleteClock(itemHash);
 
-    setPlayerClocks((prevState) =>
-      prevState.filter(({ hash }) => hash !== itemHash)
-    );
-  }, []);
+      setPlayerClocks((prevState) =>
+        prevState.filter(({ hash }) => hash !== itemHash)
+      );
+    },
+    [setPlayerClocks]
+  );
 
   const contextValue = useMemo(
     () => ({
-      fetchClocksById,
+      playerClocks,
+      setPlayerClocks,
       fetchClocksByIdAndRange,
       isLoading,
       onClockAction,
       onClockDelete,
-      playerClocks,
     }),
     [
-      fetchClocksById,
+      playerClocks,
       fetchClocksByIdAndRange,
       isLoading,
       onClockAction,
       onClockDelete,
-      playerClocks,
+      setPlayerClocks,
     ]
   );
 

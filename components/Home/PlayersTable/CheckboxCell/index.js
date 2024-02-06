@@ -1,6 +1,6 @@
 import React from "react";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { CheckIcon } from "@radix-ui/react-icons";
+import { Check } from "@phosphor-icons/react";
 
 function CheckboxCell({ getValue }) {
   return (
@@ -10,7 +10,7 @@ function CheckboxCell({ getValue }) {
       disabled
     >
       <Checkbox.Indicator color="white">
-        <CheckIcon />
+        <Check />
       </Checkbox.Indicator>
     </Checkbox.Root>
   );

@@ -2,11 +2,21 @@ import React from "react";
 
 function Error({ statusCode }) {
   return (
-    <p>
-      {statusCode
-        ? `${statusCode} - ocorreu um erro no servidor`
-        : "Oops, algo deu errado!"}
-    </p>
+    <div className="block">
+      <div className="flex mb-4 gap-4 justify-center">
+        {statusCode && (
+          <h1 className="text-5xl border-r pr-4 border-neutral-600">
+            {statusCode}
+          </h1>
+        )}
+
+        <span className="text-xl my-auto">Oops, algo deu errado!</span>
+      </div>
+
+      <p className="text-neutral-500">
+        Por favor entre em contato com um desenvolvedor
+      </p>
+    </div>
   );
 }
 

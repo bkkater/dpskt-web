@@ -4,9 +4,9 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { getSession, useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
-import { CheckIcon } from "@radix-ui/react-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  Check,
   IdentificationCard,
   PoliceCar,
   Suitcase,
@@ -110,7 +110,7 @@ export default function Register() {
                     <div className="flex items-center">
                       <SelectUI.ItemText>{option.label}</SelectUI.ItemText>
                       <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
-                        <CheckIcon />
+                        <Check />
                       </SelectUI.ItemIndicator>
                     </div>
                   </SelectUI.Item>
@@ -139,7 +139,7 @@ export default function Register() {
                     <div className="flex items-center">
                       <SelectUI.ItemText>{option.label}</SelectUI.ItemText>
                       <SelectUI.ItemIndicator className="absolute right-2 inline-flex items-center">
-                        <CheckIcon />
+                        <Check />
                       </SelectUI.ItemIndicator>
                     </div>
                   </SelectUI.Item>
