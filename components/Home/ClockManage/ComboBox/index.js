@@ -1,7 +1,8 @@
 /* eslint-disable function-paren-newline */
 import React, { forwardRef, useMemo, useState } from "react";
 import { Combobox } from "@headlessui/react";
-import { Check, CaretUpDown } from "phosphor-react";
+import { Check } from "phosphor-react";
+import { PiCaretUpDown } from "react-icons/pi";
 
 function ComboBoxComponent(
   { label, value, onChange, error, options, ...rest },
@@ -35,7 +36,7 @@ function ComboBoxComponent(
 
           {!!query.length && (
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <CaretUpDown
+              <PiCaretUpDown
                 className="h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />

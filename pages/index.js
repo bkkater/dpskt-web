@@ -6,11 +6,11 @@ import {
   ArrowSquareOut,
   BookOpen,
   HouseLine,
-  ListMagnifyingGlass,
   Notification,
   Users,
   Warning,
 } from "phosphor-react";
+import { PiListMagnifyingGlass } from "react-icons/pi";
 
 // Services
 import { getAllUsers, getUser } from "@/services/user";
@@ -119,7 +119,7 @@ export default function Home({ user, clocks, allUsers }) {
                   </div>
                 ) : (
                   <p className="mt-12 flex gap-2 align-center leading-tight  text-neutral-400">
-                    <ListMagnifyingGlass size={22} />
+                    <PiListMagnifyingGlass size={22} />
                     Nenhum registro encontrado...
                   </p>
                 )}
@@ -175,6 +175,8 @@ async function fetchData(sessionUserId) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
+
+  console.log(session);
 
   if (!session) {
     return {
