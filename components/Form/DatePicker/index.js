@@ -12,7 +12,7 @@ export default function DatePicker({ children }) {
       theme={{
         algorithm: theme.darkAlgorithm,
         token: {
-          colorPrimary: "#286f8d",
+          colorPrimary: "#168ac5",
           fontSize: "1rem",
         },
       }}

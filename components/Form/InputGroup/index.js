@@ -37,7 +37,7 @@ function InputGroup({
       </div>
 
       {error && (
-        <p className="text-rose-500 normal-case">
+        <p className="normal-case text-rose-500">
           {label
             ? `O campo ${label} é obrigatório.`
             : "Este campo é obrigatório"}

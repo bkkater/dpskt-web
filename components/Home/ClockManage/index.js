@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import * as Yup from "yup";
+import { Divider } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { TextSearch } from "lucide-react";
 
 // Hooks
 import { useUser } from "@/hooks/useUser";
@@ -57,8 +59,12 @@ function ClockManage() {
 
       setClocks(data);
     },
-    [fetchClocksByIdAndRange]
+    [fetchClocksByIdAndRange],
   );
+
+  const onDelete = useCallback((itemHash) => {
+    setClocks((prevState) => prevState.filter(({ hash }) => hash !== itemHash));
+  }, []);
 
   const options = useMemo(() => {
     const formattedOptions = usersData.map(({ player }) => ({
@@ -76,16 +82,18 @@ function ClockManage() {
   }, [handleReportSubmit, handleSubmit, watch]);
 
   return (
-    <div className="mt-12">
-      <h1 className="text-2xl text-start mb-2">Gerenciar pontos</h1>
+    <div className="mt-12 animate-fadeIn">
+      <h1 className="mb-2 text-start text-2xl">Gerenciar pontos</h1>
 
-      <p className="text-neutral-500 text-start">
+      <p className="text-start text-neutral-500">
         Obtenha um relatório detalhado dos pontos de cada player
       </p>
 
+      <Divider className="mb-0 w-full border-[#1e1e22]" />
+
       <form
         onSubmit={handleSubmit(handleReportSubmit)}
-        className="flex gap-8 relative mt-12"
+        className="relative mt-12 flex gap-8"
       >
         <Controller
           control={control}
@@ -126,13 +134,16 @@ function ClockManage() {
         )}
 
         {isSubmitSuccessful && !clocks?.length && (
-          <p className="text-neutral-500 mt-12">Nenhum relatório encontrado</p>
+          <p className="mt-12 flex items-center gap-2 leading-tight  text-neutral-400">
+            <TextSearch size={22} />
+            Nenhum relatório encontrado...
+          </p>
         )}
 
         {!!clocks?.length && (
-          <div className="grid grid-cols-2 gap-4 mt-8 w-full auto-rows-min">
+          <div className="mt-8 grid flex-1 auto-rows-min grid-cols-2 gap-4">
             {clocks.map((clock) => (
-              <ClockCard clock={clock} key={clock.hash} />
+              <ClockCard clock={clock} onDelete={onDelete} key={clock.hash} />
             ))}
           </div>
         )}

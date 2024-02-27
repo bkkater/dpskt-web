@@ -6,7 +6,7 @@ import SktIcon from "@/resources/skt.png";
 
 function SktIconComponent() {
   return (
-    <div className="flex flex-col gap-4 align-center absolute bottom-10">
+    <div className="absolute bottom-10 flex flex-col items-center gap-4">
       <Image
         src={SktIcon}
         className="w-28 self-center"

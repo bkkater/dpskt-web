@@ -13,14 +13,14 @@ function TooltipWithAlertItem({
   return (
     <Tooltip.Root>
       <AlertDialog.Root>
-        <Tooltip.Trigger className="flex align-center justify-center" asChild>
+        <Tooltip.Trigger className="flex items-center justify-center" asChild>
           <AlertDialog.Trigger>
             <Icon size={20} />
           </AlertDialog.Trigger>
         </Tooltip.Trigger>
 
         <Tooltip.Content
-          className="rounded p-2 bg-[#202024] shadow text-neutral-300"
+          className="rounded bg-[#202024] p-2 text-neutral-300 shadow"
           sideOffset={5}
         >
           {label}
@@ -30,7 +30,7 @@ function TooltipWithAlertItem({
         <AlertDialog.Portal>
           <AlertDialog.Overlay className="fixed inset-0 bg-black/90" />
 
-          <AlertDialog.Content className="bg-neutral-100 rounded shadow fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-100 h-56 text-black flex flex-col items-start gap-2 p-8">
+          <AlertDialog.Content className="fixed top-1/2 left-1/2 flex h-56 w-100 -translate-x-1/2 -translate-y-1/2 transform flex-col items-start gap-2 rounded bg-neutral-100 p-8 text-black shadow">
             <AlertDialog.Title className="text-start text-lg">
               {title}
             </AlertDialog.Title>
@@ -39,14 +39,14 @@ function TooltipWithAlertItem({
               {description}
             </AlertDialog.Description>
 
-            <div className="flex self-end gap-4 mt-6">
-              <AlertDialog.Cancel className="py-2 px-3 bg-[#eae7ec] color-[#65636d] rounded font-medium">
+            <div className="mt-6 flex gap-4 self-end">
+              <AlertDialog.Cancel className="color-[#65636d] rounded bg-[#eae7ec] py-2 px-3 font-medium">
                 Cancelar
               </AlertDialog.Cancel>
 
               <AlertDialog.Action
                 onClick={onClick}
-                className="bg-[#ffdbdc] py-2 px-3 rounded text-[#ff4d4d] font-medium"
+                className="rounded bg-[#ffdbdc] py-2 px-3 font-medium text-[#ff4d4d]"
               >
                 {buttonLabel}
               </AlertDialog.Action>

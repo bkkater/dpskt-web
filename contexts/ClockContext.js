@@ -51,7 +51,7 @@ export default function ClockProvider({ children }) {
 
     setPlayerClocks((prevState) => [formattedClock, ...prevState]);
 
-    updateUserData({
+    await updateUserData({
       ...user,
       player: {
         ...user.player,
@@ -77,7 +77,7 @@ export default function ClockProvider({ children }) {
       return prevState;
     });
 
-    updateUserData({
+    await updateUserData({
       ...user,
       player: {
         ...user.player,
@@ -87,11 +87,15 @@ export default function ClockProvider({ children }) {
   }, [playerClocks, setPlayerClocks, updateUserData, user]);
 
   const onClockAction = useCallback(async () => {
+    setLoading(true);
+
     if (!user.player.statusClock) {
       await storeClockIn(user);
     } else {
       await storeClockOut(user);
     }
+
+    setLoading(false);
   }, [storeClockIn, storeClockOut, user]);
 
   const onClockDelete = useCallback(

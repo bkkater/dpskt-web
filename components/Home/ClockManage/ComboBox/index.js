@@ -1,12 +1,11 @@
 /* eslint-disable function-paren-newline */
 import React, { forwardRef, useMemo, useState } from "react";
 import { Combobox } from "@headlessui/react";
-import { Check } from "phosphor-react";
-import { PiCaretUpDown } from "react-icons/pi";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 function ComboBoxComponent(
   { label, value, onChange, error, options, ...rest },
-  ref
+  ref,
 ) {
   const [query, setQuery] = useState("");
 
@@ -23,9 +22,9 @@ function ComboBoxComponent(
   return (
     <Combobox value={value} onChange={onChange}>
       <div className="relative">
-        <div className="rounded h-12 flex items-center px-3 border-2 focus-within:border-[#084551] focus-within:ease-in focus-within:duration-300 gap-2 border-transparent bg-neutral-800">
+        <div className="flex h-12 w-72 items-center gap-2 rounded border-2 border-transparent bg-neutral-800 px-3 focus-within:border-[#084551] focus-within:duration-300 focus-within:ease-in">
           <Combobox.Input
-            className="w-full bg-transparent outline-none placeholder:text-neutral-500 text-[#E1E1E6]"
+            className="w-full bg-transparent text-[#E1E1E6] outline-none placeholder:text-neutral-500"
             placeholder="Pesquisar player"
             autoComplete="off"
             displayValue={(option) => (option ? option.label : "")}
@@ -36,7 +35,7 @@ function ComboBoxComponent(
 
           {!!query.length && (
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <PiCaretUpDown
+              <ChevronsUpDown
                 className="h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
@@ -45,7 +44,7 @@ function ComboBoxComponent(
         </div>
 
         {error && (
-          <p className="text-rose-500 normal-case">
+          <p className="normal-case text-rose-500">
             {label
               ? `O campo ${label} é obrigatório.`
               : "Este campo é obrigatório"}
@@ -55,7 +54,7 @@ function ComboBoxComponent(
         {!!query.length && (
           <Combobox.Options className="absolute w-full rounded-b bg-neutral-800 py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
             {!filteredOptions.length && query.length && (
-              <div className="relative p-3 cursor-default select-none">
+              <div className="relative cursor-default select-none p-3">
                 Nenhum player encontrado
               </div>
             )}
@@ -65,7 +64,7 @@ function ComboBoxComponent(
                 key={option.label}
                 value={option}
                 className={({ active }) =>
-                  `relative p-3 hover:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-700 last:border-transparent ${
+                  `relative rounded-b border-b border-neutral-700 p-3 outline-none transition-colors last:border-transparent hover:bg-gray-800 ${
                     active && "bg-gray-800"
                   }`
                 }

@@ -26,7 +26,7 @@ function PlayerResume({ player, clocks }) {
   }, 0);
 
   return (
-    <div className="bg-[#202024] w-80 max-w-80 rounded py-8 flex-col flex gap-px border border-[#286f8d] mt-8 text-center h-min">
+    <div className="w-72 bg-[#0a0a0a] rounded py-8 flex-col flex gap-px border-2 border-[#29292E] mt-8 text-center h-min">
       <Image
         className="self-center mb-6"
         src={
@@ -37,12 +37,17 @@ function PlayerResume({ player, clocks }) {
         priority
       />
       <span className="font-bold">{player.role}</span>
-      <span>{`${player.id} ${player.name}`}</span>
+      <span className="text-neutral-400">{`${player.id} ${player.name}`}</span>
+
       <span className="mt-6 font-bold">Recrutamento</span>
-      {format(player.joinedAt, "dd MMM yy")}
+      <span className="text-neutral-400">
+        {format(player.joinedAt, "dd MMM yy")}
+      </span>
 
       <span className="mt-6 font-bold">Tempo total em serviço</span>
-      <span>{formatDistinct(totalMinutes)}</span>
+      <span className="text-neutral-400">
+        {totalMinutes > 0 ? formatDistinct(totalMinutes) : "N/A"}
+      </span>
     </div>
   );
 }

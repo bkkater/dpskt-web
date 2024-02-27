@@ -21,6 +21,7 @@ import CheckboxCell from "@/components/Home/PlayersTable/CheckboxCell";
 import ActionsCell from "@/components/Home/PlayersTable/ActionsCell";
 import Loading from "@/components/Loading";
 import Button from "@/components/Button";
+import { Divider } from "antd";
 
 const columnHelper = createColumnHelper();
 
@@ -31,9 +32,9 @@ const columns = [
       const iconClassName = ["w-2 h-2 rounded-full my-auto mr-2"];
 
       if (props.renderValue()) {
-        iconClassName.push("bg-[#2D8F60]");
+        iconClassName.push("bg-[#3DA35D]");
       } else {
-        iconClassName.push("bg-[#A12525]");
+        iconClassName.push("bg-[#dd2323]");
       }
 
       return <div className={iconClassName.join(" ")} />;
@@ -72,11 +73,11 @@ const columns = [
     cell: (info) => info.renderValue(),
     sortingFn: (compareRow, baseRow, columnId) => {
       const basePosition = ROLE_OPTIONS.findIndex(
-        (item) => item.label === baseRow.getValue(columnId)
+        (item) => item.label === baseRow.getValue(columnId),
       );
 
       const comparePosition = ROLE_OPTIONS.findIndex(
-        (item) => item.label === compareRow.getValue(columnId)
+        (item) => item.label === compareRow.getValue(columnId),
       );
 
       return basePosition - comparePosition;
@@ -115,31 +116,33 @@ export default function PlayersTable() {
   });
 
   return (
-    <div className="mt-12">
-      <h1 className="text-2xl text-start mb-2">Gerenciar usuários</h1>
+    <div className="my-12 animate-fadeIn">
+      <h1 className="mb-2 text-start text-2xl">Gerenciar usuários</h1>
 
-      <p className="text-neutral-500 text-start">
+      <p className="text-start text-neutral-500">
         Altere informações, cargos ou exonere players cadastrados
       </p>
 
+      <Divider className="mb-0 w-full border-[#1e1e22]" />
+
       {!isLoading && (
         <>
-          <div className="flex align-center gap-4 mt-12 mb-8">
+          <div className="mt-12 mb-8 flex items-center gap-4">
             {users && (
               <>
                 <p className="text-neutral-400">
                   Usuários cadastrados:
-                  <b className="text-neutral-300 ml-2">{users.totalPlayers}</b>
+                  <b className="ml-2 text-neutral-300">{users.totalPlayers}</b>
                 </p>
                 <span className="text-neutral-300">·</span>
                 <p className="text-neutral-400">
                   Players patrulhando:
-                  <b className="text-neutral-300 ml-2">{users.totalClocks}</b>
+                  <b className="ml-2 text-neutral-300">{users.totalClocks}</b>
                 </p>
               </>
             )}
 
-            <Button className="bg-[#286f8d] h-12 w-52 font-medium shadow transition-all text-[#e1e1e6] flex items-center gap-2 border-[#286f8d] hover:bg-transparent border ml-auto ">
+            <Button className="ml-auto flex h-12 w-52 items-center gap-2 border border-[#168ac5] bg-[#168ac5] font-medium text-[#e1e1e6] shadow transition-all hover:bg-transparent ">
               <IoLogoDiscord size={20} />
               Exportar hierarquia
             </Button>
@@ -148,19 +151,19 @@ export default function PlayersTable() {
               placeholder="Pesquisar"
               name="search"
               onChange={({ target }) => setGlobalFilter(target.value)}
-              className="w-96 bg-neutral-800 outline-none rounded placeholder:text-neutral-600 flex h-12 px-4 border-2  border-neutral-800 focus:border-[#084551]"
+              className="flex h-12 w-96 rounded border-2 border-neutral-800 bg-neutral-800 px-4 outline-none  placeholder:text-neutral-600 focus:border-[#084551]"
               autoComplete="off"
             />
           </div>
 
-          <table className="min-w-full mt-3">
-            <thead className="bg-neutral-800 rounded">
+          <table className="mt-3 min-w-full">
+            <thead className="rounded bg-neutral-800">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="px-6 py-4 text-left text-xs font-medium  uppercase tracking-wider cursor-pointer"
+                      className="cursor-pointer px-6 py-4 text-left text-xs  font-medium uppercase tracking-wider"
                       onClick={header.column.getToggleSortingHandler()}
                       style={{
                         width: header.getSize(),
@@ -168,7 +171,7 @@ export default function PlayersTable() {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                       {{
                         asc: " ▲",
@@ -179,20 +182,20 @@ export default function PlayersTable() {
                 </tr>
               ))}
             </thead>
-            <tbody className="bg-neutral-900 divide-y divide-neutral-700">
+            <tbody className="divide-y divide-neutral-700 bg-neutral-900">
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="px-6 py-4 whitespace-nowrap"
+                      className="whitespace-nowrap px-6 py-4"
                       style={{
                         width: cell.column.getSize(),
                       }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </td>
                   ))}

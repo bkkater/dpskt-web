@@ -12,14 +12,14 @@ function TooltipWithDialogItem({
   return (
     <Tooltip.Root>
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
-        <Tooltip.Trigger className="flex align-center justify-center" asChild>
+        <Tooltip.Trigger className="flex items-center justify-center" asChild>
           <Dialog.Trigger>
             <Icon size={20} />
           </Dialog.Trigger>
         </Tooltip.Trigger>
 
         <Tooltip.Content
-          className="rounded p-2 bg-[#202024] shadow text-neutral-300"
+          className="rounded bg-[#202024] p-2 text-neutral-300 shadow"
           sideOffset={5}
         >
           {label}

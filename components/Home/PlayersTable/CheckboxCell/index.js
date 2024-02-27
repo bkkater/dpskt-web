@@ -6,7 +6,7 @@ function CheckboxCell({ getValue }) {
   return (
     <Checkbox.Root
       defaultChecked={getValue()}
-      className="ml-3 bg-neutral-700 w-4 h-4 flex rounded-sm align-center justify-center shadow"
+      className="ml-3 flex h-4 w-4 items-center justify-center rounded-sm bg-neutral-700 shadow"
       disabled
     >
       <Checkbox.Indicator color="white">

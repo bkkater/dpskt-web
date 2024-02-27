@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { Divider } from "antd";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -6,11 +7,11 @@ import {
   ArrowSquareOut,
   BookOpen,
   HouseLine,
-  Notification,
   Users,
   Warning,
+  // Notification,
 } from "phosphor-react";
-import { PiListMagnifyingGlass } from "react-icons/pi";
+import { TextSearch } from "lucide-react";
 
 // Services
 import { getAllUsers, getUser } from "@/services/user";
@@ -30,8 +31,9 @@ import PlayersTable from "@/components/Home/PlayersTable";
 import ClockManage from "@/components/Home/ClockManage";
 
 export default function Home({ user, clocks, allUsers }) {
-  const { isLoading, setUser, setUsers } = useUser();
-  const { setPlayerClocks } = useClock();
+  const { setUser, setUsers } = useUser();
+  const { playerClocks, setPlayerClocks } = useClock();
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -41,33 +43,37 @@ export default function Home({ user, clocks, allUsers }) {
         setUsers(allUsers);
       }
     }
-  }, [allUsers, setUser, setUsers, user]);
 
-  useEffect(() => {
     if (clocks) {
       setPlayerClocks(clocks);
     }
-  }, [clocks, setPlayerClocks]);
+
+    setLoading(false);
+  }, [allUsers, clocks, setPlayerClocks, setUser, setUsers, user]);
 
   const tabClassName =
-    "p-3 w-60 data-[state=active]:border-[#286f8d] data-[state=active]:border-b flex align-end justify-center gap-2";
+    "p-3 w-60 data-[state=active]:border-[#168ac5] data-[state=active]:border-b flex align-end justify-center gap-2";
 
   return (
-    <Page pageTitle="Home">
+    <Page pageTitle="Home" className="">
       {!isLoading && user && (
-        <>
-          <div className="flex align-center mb-8 gap-6">
-            <h2 className="font-normal text-2xl">
+        <div className="container mx-auto">
+          <div className="mb-8 flex items-center gap-6">
+            <h2 className="animate-fromTop text-2xl font-normal">
               Olá,
-              <span className="font-bold ml-2">{user.player.name}</span>
+              <span className="ml-2 font-bold">{user.player.name}</span>
             </h2>
 
-            <Button className="border-[#5865F2] border items-center font-medium w-52 h-12 transition-transform hover:scale-105 ml-auto hidden md:flex">
+            <Link
+              className="ml-auto hidden h-12 w-52 items-center justify-center gap-2 rounded border border-[#6B52AE] font-medium transition-transform hover:scale-105 md:flex"
+              target="_blank"
+              href="https://discord.gg/qydNNVaH9G"
+            >
               Ir para servidor
-              <ArrowSquareOut className="ml-2" size={18} />
-            </Button>
+              <ArrowSquareOut size={18} />
+            </Link>
 
-            <Button className="border-[#286f8d] border items-center font-medium w-52 h-12 transition-transform hover:scale-105 hidden md:flex">
+            <Button className="hidden border border-[#168ac5] bg-transparent md:flex">
               <Warning className="mr-2" size={18} />
               Comunicar problema
             </Button>
@@ -75,9 +81,12 @@ export default function Home({ user, clocks, allUsers }) {
 
           <PlayerCard />
 
-          <Tabs.Root className="flex flex-col min-w-fit" defaultValue="history">
+          <Tabs.Root
+            className="flex min-w-fit animate-fadeIn flex-col"
+            defaultValue="history"
+          >
             {user.player.isAdmin && (
-              <Tabs.List className="shrink-0 flex border-b border-[#2B2D42] text-lg mt-8">
+              <Tabs.List className="mt-8 flex shrink-0 border-b border-[#2B2D42] text-lg">
                 <Tabs.Trigger value="history" className={tabClassName}>
                   <HouseLine className="flex self-center" />
                   Home
@@ -92,34 +101,29 @@ export default function Home({ user, clocks, allUsers }) {
                   <BookOpen className="flex self-center" />
                   Relatórios
                 </Tabs.Trigger>
-
-                <Tabs.Trigger value="alo" className={tabClassName}>
-                  <Notification className="flex self-center" />
-                  Notificações
-                </Tabs.Trigger>
               </Tabs.List>
             )}
 
             <Tabs.Content value="history" className="relative outline-none">
-              <div className="mt-12">
-                <h1 className="text-2xl text-start mb-2">Meus pontos</h1>
+              <div className="my-12 animate-fadeIn">
+                <h1 className="mb-2 text-start text-2xl">Meus pontos</h1>
 
-                <p className="text-neutral-500 col-span-full">
+                <p className="col-span-full text-neutral-500">
                   Aqui você vai poder visualizar e gerenciar seus pontos
                   registrados no sistema
                 </p>
 
-                <Divider className="w-full border-[#1e1e22] mb-0" />
+                <Divider className="mb-0 w-full border-[#1e1e22]" />
 
-                {clocks.length ? (
-                  <div className="grid xl:grid-cols-2 grid-cols-1 gap-4 py-8">
-                    {clocks.map((clock) => (
+                {playerClocks.length ? (
+                  <div className="grid grid-cols-1 gap-4 py-8 xl:grid-cols-2">
+                    {playerClocks.map((clock) => (
                       <ClockCard clock={clock} key={clock.hash} />
                     ))}
                   </div>
                 ) : (
-                  <p className="mt-12 flex gap-2 align-center leading-tight  text-neutral-400">
-                    <PiListMagnifyingGlass size={22} />
+                  <p className="mt-12 flex items-center gap-2 leading-tight  text-neutral-400">
+                    <TextSearch size={22} />
                     Nenhum registro encontrado...
                   </p>
                 )}
@@ -144,7 +148,7 @@ export default function Home({ user, clocks, allUsers }) {
               </>
             )}
           </Tabs.Root>
-        </>
+        </div>
       )}
 
       {isLoading && <Loading className="absolute left-1/2 top-1/2" />}
@@ -175,8 +179,6 @@ async function fetchData(sessionUserId) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
-
-  console.log(session);
 
   if (!session) {
     return {

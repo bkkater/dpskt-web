@@ -19,7 +19,7 @@ function SimplePickerComponent(
     icon = null,
     ...rest
   },
-  ref
+  ref,
 ) {
   return (
     <InputGroup
@@ -30,7 +30,7 @@ function SimplePickerComponent(
       className={className}
     >
       <DatePickerUI
-        className="h-12 bg-transparent border-transparent px-3 w-64 focus:shadow-none focus-within:shadow-none"
+        className="h-12 w-64 border-transparent bg-transparent px-3 focus-within:shadow-none focus:shadow-none"
         placeholder="Selecione uma data"
         format="DD/MM/YYYY"
         getPopupContainer={(trigger) => trigger.parentElement}

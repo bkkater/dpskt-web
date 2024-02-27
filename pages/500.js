@@ -2,16 +2,16 @@ import React from "react";
 
 function Custom500() {
   return (
-    <div className="block">
-      <div className="flex mb-4 gap-4 justify-center">
-        <h1 className="text-5xl border-r pr-4 border-neutral-600">404</h1>
+    <div className="flex h-full flex-col items-center justify-center gap-4 bg-custom">
+      <div className="mx-auto flex items-center justify-center gap-4">
+        <h1 className="border-r border-neutral-600 pr-4 text-5xl">500</h1>
 
-        <span className="text-xl my-auto">
+        <span className="my-auto text-xl">
           Oops, algo deu errado no servidor!
         </span>
       </div>
 
-      <p className="text-neutral-500">
+      <p className="text-center text-neutral-500">
         Por favor entre em contato com um desenvolvedor
       </p>
     </div>

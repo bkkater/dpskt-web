@@ -55,11 +55,11 @@ function ActionsCell({ row }) {
 
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const selectedUser = users.find(
-    ({ discordId }) => row.original.discordId === discordId
+    ({ discordId }) => row.original.discordId === discordId,
   );
 
   const currentRoleIndex = ROLE_OPTIONS.findIndex(
-    (item) => item.label === selectedUser.player.role
+    (item) => item.label === selectedUser.player.role,
   );
 
   const {
@@ -99,7 +99,7 @@ function ActionsCell({ row }) {
 
       setUpdateModalOpen(false);
     },
-    [selectedUser, updateUserData]
+    [selectedUser, updateUserData],
   );
 
   const handlePlayerRank = useCallback(
@@ -116,7 +116,7 @@ function ActionsCell({ row }) {
         setValue("role", updatedRole);
       }
     },
-    [currentRoleIndex, rankPlayerDown, rankPlayerUp, selectedUser, setValue]
+    [currentRoleIndex, rankPlayerDown, rankPlayerUp, selectedUser, setValue],
   );
 
   return (
@@ -135,7 +135,7 @@ function ActionsCell({ row }) {
 
         {currentRoleIndex !== 0 ? (
           <TooltipItem
-            iconColor="#A12525"
+            iconColor="#dd2323"
             label="Rebaixar patente"
             icon={ArrowDown}
             onClick={() => handlePlayerRank({ type: "down" })}
@@ -150,10 +150,10 @@ function ActionsCell({ row }) {
           onOpenChange={setUpdateModalOpen}
           label="Editar informações"
         >
-          <Dialog.Content className="bg-[#202024] rounded shadow fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-auto flex flex-col items-start px-8 py-6 text-[#e1e1e6]">
-            <h1 className="text-2xl mb-2 text-start">Editar</h1>
+          <Dialog.Content className="fixed top-1/2 left-1/2 flex h-auto -translate-x-1/2 -translate-y-1/2 transform flex-col items-start rounded bg-[#202024] px-8 py-6 text-[#e1e1e6] shadow">
+            <h1 className="mb-2 text-start text-2xl">Editar</h1>
 
-            <p className="text-neutral-500 text-start mb-8">
+            <p className="mb-8 text-start text-neutral-500">
               Altere informações do personagem escolhido
             </p>
 
@@ -191,7 +191,7 @@ function ActionsCell({ row }) {
                   >
                     {CORPORATION_OPTIONS.map((option) => (
                       <SelectUI.Item
-                        className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-800 last:border-transparent"
+                        className="relative rounded-b border-b border-neutral-800 p-3 outline-none transition-colors last:border-transparent focus:bg-gray-800"
                         value={option.label}
                         key={option.label}
                       >
@@ -220,7 +220,7 @@ function ActionsCell({ row }) {
                   >
                     {ROLE_OPTIONS.map((option) => (
                       <SelectUI.Item
-                        className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-800 last:border-transparent"
+                        className="relative rounded-b border-b border-neutral-800 p-3 outline-none transition-colors last:border-transparent focus:bg-gray-800"
                         value={option.label}
                         key={option.label}
                       >
@@ -267,13 +267,13 @@ function ActionsCell({ row }) {
                 />
               )}
 
-              <div className="flex gap-4 mt-6 pt-6 border-t border-[#34343a] rounded">
-                <Dialog.Close className="border-[#4689b3] hover:bg-[#4689b3] border-2 rounded h-12 font-medium text-sm py-2 shadow-transparent transition-colors w-full">
+              <div className="mt-6 flex gap-4 rounded border-t border-[#34343a] pt-6">
+                <Dialog.Close className="h-12 w-full rounded border border-[#168ac5] py-2 text-sm font-medium shadow-transparent transition-colors hover:bg-[#168ac5]">
                   Cancelar
                 </Dialog.Close>
 
                 <Button
-                  className="bg-[#286f8d] hover:bg-[#4689b3] h-12 font-medium w-full text-sm py-2 shadow shadow-neutral-900 transition-colors"
+                  className="h-12 w-full bg-[#168ac5] py-2 text-sm font-medium shadow shadow-neutral-900 transition-colors hover:transform-none hover:bg-[#0e618b]"
                   type="submit"
                 >
                   Salvar alterações

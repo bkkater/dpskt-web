@@ -5,13 +5,6 @@ import { useRouter } from "next/router";
 import { getSession, useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Check,
-  IdentificationCard,
-  PoliceCar,
-  Suitcase,
-  User,
-} from "phosphor-react";
 
 // Config
 import { CORPORATION_OPTIONS, ROLE_OPTIONS } from "@/config/general";
@@ -27,6 +20,7 @@ import Page from "@/components/Page";
 import Button from "@/components/Button";
 import Input from "@/components/Form/Input";
 import Select from "@/components/Form/Select";
+import { Check, Landmark, ScanFace, Shield, User } from "lucide-react";
 
 // Validation
 const schema = Yup.object().shape({
@@ -60,15 +54,18 @@ export default function Register() {
         console.log(err);
       }
     },
-    [registerUser, router, session.user?.id]
+    [registerUser, router, session.user?.id],
   );
 
   return (
-    <Page className="flex items-center justify-center" pageTitle="Registro">
-      <div className="bg-[#202024] p-10 rounded w-100 min-h-96">
-        <h1 className="text-2xl mb-2 text-start">Registro</h1>
+    <Page
+      className="flex items-center justify-center bg-custom"
+      pageTitle="Registro"
+    >
+      <div className="m-auto w-100 rounded border border-[#29292E] bg-[#202024] p-10">
+        <h1 className="mb-2 text-start text-2xl">Registro</h1>
 
-        <p className="text-neutral-500 text-start mb-8">
+        <p className="mb-8 text-start text-neutral-500">
           Insira informações do seu personagem
         </p>
 
@@ -85,7 +82,7 @@ export default function Register() {
             label="ID"
             placeholder="ID"
             type="number"
-            icon={IdentificationCard}
+            icon={ScanFace}
             error={errors.id?.message || null}
             {...register("id")}
           />
@@ -96,14 +93,14 @@ export default function Register() {
             render={({ field: { onChange, value } }) => (
               <Select
                 label="Corporação"
-                icon={PoliceCar}
+                icon={Landmark}
                 value={value}
                 onChange={onChange}
                 error={errors.corporation?.message || null}
               >
                 {CORPORATION_OPTIONS.map((option) => (
                   <SelectUI.Item
-                    className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-800 last:border-transparent"
+                    className="relative rounded-b border-b border-neutral-800 p-3 outline-none transition-colors last:border-transparent focus:bg-gray-800"
                     value={option.label}
                     key={option.label}
                   >
@@ -125,14 +122,14 @@ export default function Register() {
             render={({ field: { onChange, value } }) => (
               <Select
                 label="Cargo"
-                icon={Suitcase}
+                icon={Shield}
                 value={value}
                 onChange={onChange}
                 error={errors.role?.message || null}
               >
                 {ROLE_OPTIONS.map((option) => (
                   <SelectUI.Item
-                    className="relative p-3 focus:bg-gray-800 rounded-b transition-colors outline-none border-b border-neutral-800 last:border-transparent"
+                    className="relative rounded-b border-b border-neutral-800 p-3 outline-none transition-colors last:border-transparent focus:bg-gray-800"
                     value={option.label}
                     key={option.label}
                   >
@@ -149,7 +146,7 @@ export default function Register() {
           />
 
           <Button
-            className="bg-[#286f8d] hover:bg-[#4689b3]  h-12 font-bold mt-8 w-full text-sm py-2 shadow shadow-neutral-900 transition-colors disabled:bg-[#1d2a30]"
+            className="mt-8 h-12 w-full bg-[#168ac5] py-2 text-sm font-bold shadow shadow-neutral-900 transition-colors hover:bg-[#168ac5] disabled:bg-[#1d2a30]"
             type="submit"
             disabled={isLoading}
           >

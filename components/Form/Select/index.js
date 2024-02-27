@@ -21,7 +21,7 @@ function SelectComponent(
     children,
     ...rest
   },
-  ref
+  ref,
 ) {
   const classList = ["shadow rounded-b w-60 bottom-0 z-50"];
 
@@ -46,7 +46,7 @@ function SelectComponent(
         <SelectUI.Trigger
           aria-label={label}
           ref={ref}
-          className="inline-flex items-center justify-between w-full outline-none data-[placeholder]:text-neutral-500"
+          className="inline-flex w-full items-center justify-between outline-none data-[placeholder]:text-neutral-500"
         >
           <SelectUI.Value placeholder={label} />
 
@@ -67,7 +67,7 @@ function SelectComponent(
           <CaretUp />
         </SelectUI.ScrollUpButton>
 
-        <SelectUI.Viewport className="shadow-lg max-h-48">
+        <SelectUI.Viewport className="max-h-48 shadow-lg">
           {children}
         </SelectUI.Viewport>
 

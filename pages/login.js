@@ -6,37 +6,40 @@ import { IoLogoDiscord } from "react-icons/io5";
 
 // Components
 import Button from "@/components/Button";
-import SktIcon from "@/components/Icons/Skt";
 
 // Resources
 import Logo from "@/resources/dpskt.png";
 
 export default function Login() {
   return (
-    <>
+    <div className="flex h-full animate-fadeIn bg-custom">
       <Head>
         <title>DPSKT - Login</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div>
-        <Image src={Logo} alt="DPSKT" className="mx-auto" priority />
+      <div className="m-auto flex w-80 animate-fadeIn flex-col gap-8 rounded border border-[#29292E] bg-[#202024] p-10">
+        <Image
+          src={Logo}
+          alt="DPSKT"
+          className="mx-auto"
+          width={180}
+          priority
+        />
 
-        <p className="text-neutral-500 text-center mt-5 mb-5">
+        <p className="text-center text-neutral-500">
           Faça login para abrir acessar a plataforma!
         </p>
 
         <Button
-          className="bg-[#5865F2] text-white mt-8 h-12 w-full font-medium text-sm"
+          className="hover:scale-1 w-full bg-[#6B52AE] transition-colors hover:bg-[#5059bb]"
           onClick={() => signIn("discord")}
         >
           <IoLogoDiscord size={24} className="mr-3" />
           Entrar com discord
         </Button>
       </div>
-
-      <SktIcon />
-    </>
+    </div>
   );
 }
 

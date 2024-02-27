@@ -19,7 +19,7 @@ function RangePickerComponent(
     icon = null,
     ...rest
   },
-  ref
+  ref,
 ) {
   return (
     <InputGroup
@@ -30,7 +30,7 @@ function RangePickerComponent(
       className={className}
     >
       <DatePickerUI.RangePicker
-        className="h-12 bg-transparent border-transparent px-3 w-64 focus:shadow-none focus-within:shadow-none"
+        className="h-12 w-72 border-transparent bg-transparent px-3 focus-within:shadow-none focus:shadow-none"
         placeholder={["Data inicial", "Data final"]}
         suffixIcon={null}
         superNextIcon={null}

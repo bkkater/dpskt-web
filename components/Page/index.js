@@ -3,19 +3,12 @@ import Head from "next/head";
 
 // Resources
 
+import { twMerge } from "tailwind-merge";
 import Header from "../Header";
 
 export default function Page({ className, children, pageTitle }) {
-  const classList = [
-    "container py-10 mx-auto md:w-10/12 lg:8/12 md:px-0 px-5 w-full flex-1",
-  ];
-
-  if (className) {
-    classList.push(className);
-  }
-
   return (
-    <div className="w-full h-full flex flex-col scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-thumb-rounded overflow-auto scrollbar-track-neutral-700 scrollbar-rounded-large">
+    <div className="scrollbar-thumb-rounded scrollbar-rounded-large flex h-full w-full flex-col overflow-auto scrollbar-thin scrollbar-track-neutral-700 scrollbar-thumb-neutral-800">
       <Head>
         <title>{`DPSKT - ${pageTitle}`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +17,14 @@ export default function Page({ className, children, pageTitle }) {
 
       <Header />
 
-      <main className={classList.join(" ")}>{children}</main>
+      <main
+        className={twMerge(
+          "animate-fadeIn h-full w-full  bg-[#121214] px-5 py-10",
+          className,
+        )}
+      >
+        {children}
+      </main>
     </div>
   );
 }
