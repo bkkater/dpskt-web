@@ -18,13 +18,6 @@
 <br />
 <br />
 
-<p>
-
-   
-  <a href="https://dpskt.vercel.app/" target="_blank">
-    <img alt="Vercel" src="https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white" height="48">
-  </a>
-</p>
 
 # :pushpin: Tabela de Conteúdo
 
