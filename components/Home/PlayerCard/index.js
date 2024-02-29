@@ -69,7 +69,7 @@ export default function PlayerCard() {
             )}
           </Button>
 
-          <div className="absolute top-5 right-5 flex items-center justify-end gap-2 self-center lg:static lg:flex-1">
+          <div className="absolute top-5 left-5 flex items-center justify-end gap-2 self-center lg:static lg:flex-1">
             <Power
               size={18}
               color={user.player.statusClock ? "#3DA35D" : "#ef4c4c"}

@@ -93,7 +93,7 @@ function ClockManage() {
 
       <form
         onSubmit={handleSubmit(handleReportSubmit)}
-        className="relative mt-12 flex gap-8"
+        className="relative mt-12 flex flex-col gap-8 md:flex-row"
       >
         <Controller
           control={control}

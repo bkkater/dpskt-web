@@ -11,10 +11,12 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className=" border-b border-[#29292E] bg-[#1B1B1E] px-5">
-      <div className="mx-auto flex h-28 items-center justify-between md:container">
+    <header className="border-b border-[#29292E] bg-[#1B1B1E] px-5">
+      <div className="mx-auto flex h-20 items-center justify-between md:container md:h-28">
         <Link href="/" className="flex gap-2">
-          <h1 className="leading-0 my-auto text-5xl leading-none">DPSKT</h1>
+          <h1 className="leading-0 my-auto text-3xl leading-none md:text-5xl">
+            DPSKT
+          </h1>
         </Link>
 
         <div className="flex items-center gap-8">
