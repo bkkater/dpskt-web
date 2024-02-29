@@ -46,7 +46,7 @@ export default function PlayerCard() {
             width={120}
             alt="DPSKT"
             priority
-            className="self-center"
+            className="mt-5 self-center md:mt-0"
           />
 
           <div className="flex justify-center gap-2 sm:flex-col">
