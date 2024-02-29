@@ -1,4 +1,3 @@
-import Head from "next/head";
 import React from "react";
 import Image from "next/image";
 import { signIn, getSession } from "next-auth/react";
@@ -13,11 +12,6 @@ import Logo from "@/resources/dpskt.png";
 export default function Login() {
   return (
     <div className="flex h-full animate-fadeIn bg-custom">
-      <Head>
-        <title>DPSKT - Login</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <div className="m-auto flex w-80 animate-fadeIn flex-col gap-8 rounded border border-[#29292E] bg-[#202024] p-10">
         <Image
           src={Logo}

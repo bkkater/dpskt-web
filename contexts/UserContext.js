@@ -17,7 +17,7 @@ export default function UserProvider({ children }) {
   const updateState = useCallback(
     ({ updatedUser }) => {
       const userIndex = allUsers.data.findIndex(
-        ({ discordId }) => discordId === updatedUser.discordId
+        ({ discordId }) => discordId === updatedUser.discordId,
       );
 
       setAllUsers((prevState) => {
@@ -38,7 +38,7 @@ export default function UserProvider({ children }) {
         setUser(updatedUser);
       }
     },
-    [allUsers.data, user]
+    [allUsers.data, user],
   );
 
   const setUsers = useCallback(async ({ users, entries, onlineClocks }) => {
@@ -76,7 +76,7 @@ export default function UserProvider({ children }) {
 
       updateState({ updatedUser });
     },
-    [updateState]
+    [updateState],
   );
 
   const rankPlayerDown = useCallback(
@@ -89,21 +89,17 @@ export default function UserProvider({ children }) {
         },
       };
 
-      try {
-        await updateUser(updatedUser);
+      await updateUser(updatedUser);
 
-        updateState({ updatedUser });
-      } catch (err) {
-        console.log(err.response);
-      }
+      updateState({ updatedUser });
     },
-    [updateState]
+    [updateState],
   );
 
   const exonerateUser = useCallback(
     async (playerId) => {
       const userIndex = allUsers.data.findIndex(
-        ({ player: { id } }) => id === playerId
+        ({ player: { id } }) => id === playerId,
       );
 
       try {
@@ -116,7 +112,7 @@ export default function UserProvider({ children }) {
         return err.response;
       }
     },
-    [allUsers.data]
+    [allUsers.data],
   );
 
   const updateUserData = useCallback(
@@ -125,7 +121,7 @@ export default function UserProvider({ children }) {
 
       updateState({ updatedUser });
     },
-    [updateState]
+    [updateState],
   );
 
   const contextValue = useMemo(
@@ -151,7 +147,7 @@ export default function UserProvider({ children }) {
       exonerateUser,
       updateUserData,
       isLoading,
-    ]
+    ],
   );
 
   return (

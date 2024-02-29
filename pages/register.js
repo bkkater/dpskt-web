@@ -46,13 +46,8 @@ export default function Register() {
 
   const handleRegisterSubmit = useCallback(
     async (data) => {
-      try {
-        await registerUser(session.user?.id, data);
-
-        router.push("/");
-      } catch (err) {
-        console.log(err);
-      }
+      await registerUser(session.user?.id, data);
+      router.push("/");
     },
     [registerUser, router, session.user?.id],
   );
