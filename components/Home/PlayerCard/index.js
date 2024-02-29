@@ -34,7 +34,7 @@ export default function PlayerCard() {
   }
 
   return (
-    <div className="md:justify-normal relative flex w-full animate-fromLeft flex-col gap-6  rounded border-2 border-[#29292E] bg-[#202024] bg-[url('../resources/bg-texture.png')] bg-cover px-4 py-8 sm:flex-row sm:justify-between md:gap-16 md:px-8">
+    <div className="md:justify-normal relative flex w-full animate-fromLeft flex-col gap-6 rounded border-2 border-[#29292E] bg-[#202024] bg-[url('../resources/bg-texture.png')] bg-cover px-4 py-8 sm:flex-row sm:justify-between md:gap-16 md:px-8">
       {user && (
         <>
           <Image
@@ -69,7 +69,7 @@ export default function PlayerCard() {
             )}
           </Button>
 
-          <div className="absolute top-5 left-5 flex items-center justify-end gap-2 self-center lg:static lg:flex-1">
+          <div className="sm:left-none absolute top-5 left-5 flex items-center justify-end gap-2 self-center sm:right-5 lg:static lg:flex-1">
             <Power
               size={18}
               color={user.player.statusClock ? "#3DA35D" : "#ef4c4c"}
