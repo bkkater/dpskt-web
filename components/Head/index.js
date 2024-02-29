@@ -8,10 +8,10 @@ export default function HeadComponent() {
       <title>DPSKT - Portal</title>
 
       <meta name="description" content="DPSKT portal" />
-      <link rel="shortcut icon" href="/public/favicon.ico" />
+      <link rel="icon" href="/public/favicon.ico" type="image/x-icon" />
       <meta name="theme-color" content="#121214" />
       <link rel="apple-touch-icon" href="/resources/icons/icon-128x128.png" />
-      <link rel="icon" href="/resources/icons/icon-128x128.png" />
+      {/* <link rel="icon" href="/resources/icons/icon-128x128.png" /> */}
 
       <link rel="manifest" href="/manifest.json" />
     </Head>

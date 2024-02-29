@@ -85,18 +85,18 @@ export default function Home({ user, clocks, allUsers }) {
             {user.player.isAdmin && (
               <Tabs.List className="-mx-5 mt-8 flex w-screen shrink-0 border-b border-[#2B2D42] text-lg md:mx-0 md:w-auto">
                 <Tabs.Trigger value="history" className={tabClassName}>
-                  <HouseLine className="flex self-center" />
-                  Home
+                  <HouseLine className="flex self-center text-2xl md:text-lg" />
+                  <span className="hidden md:block">Home</span>
                 </Tabs.Trigger>
 
                 <Tabs.Trigger value="playerManage" className={tabClassName}>
-                  <Users className="flex self-center" />
-                  Players
+                  <Users className="flex self-center text-2xl md:text-lg" />
+                  <span className="hidden md:block">Players</span>
                 </Tabs.Trigger>
 
                 <Tabs.Trigger value="clockManage" className={tabClassName}>
-                  <BookOpen className="flex self-center" />
-                  Relatórios
+                  <BookOpen className="flex self-center text-2xl md:text-lg" />
+                  <span className="hidden md:block">Relatórios</span>
                 </Tabs.Trigger>
               </Tabs.List>
             )}
