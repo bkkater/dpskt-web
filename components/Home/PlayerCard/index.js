@@ -55,7 +55,7 @@ export default function PlayerCard() {
           </div>
 
           <Button
-            className="my-auto h-12 w-52 bg-[#121214] font-medium transition-colors hover:bg-[#0a0a0a]"
+            className="my-auto h-12 w-full bg-[#121214] font-medium transition-colors hover:bg-[#0a0a0a] sm:w-52"
             onClick={() => onClockAction(user)}
             disabled={isLoading}
           >

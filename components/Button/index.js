@@ -1,7 +1,7 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
-function Button({ className, children, ...rest }) {
+function ButtonComponent({ className, children, ref, ...rest }) {
   return (
     <button
       className={twMerge(
@@ -9,6 +9,7 @@ function Button({ className, children, ...rest }) {
         className,
       )}
       type="button"
+      ref={ref}
       {...rest}
     >
       {children}
@@ -16,4 +17,6 @@ function Button({ className, children, ...rest }) {
   );
 }
 
-export default Button;
+const Checkbox = forwardRef(ButtonComponent);
+
+export default Checkbox;

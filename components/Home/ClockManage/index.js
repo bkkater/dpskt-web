@@ -13,7 +13,7 @@ import { useClock } from "@/hooks/useClock";
 // Components
 import DatePicker from "@/components/Form/DatePicker";
 import ComboBox from "@/components/Home/ClockManage/ComboBox";
-import ClockCard from "@/components/Home/ClockCard";
+import ClockCard from "@/components/Home/History/ClockCard";
 import PlayerResume from "@/components/Home/ClockManage/PlayerResume";
 
 const schema = Yup.object().shape({

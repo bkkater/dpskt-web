@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { getSession } from "next-auth/react";
-import { Divider } from "antd";
 import * as Tabs from "@radix-ui/react-tabs";
 import {
   ArrowSquareOut,
@@ -9,9 +8,7 @@ import {
   HouseLine,
   Users,
   Warning,
-  // Notification,
 } from "phosphor-react";
-import { TextSearch } from "lucide-react";
 
 // Services
 import { getAllUsers, getUser } from "@/services/user";
@@ -26,13 +23,13 @@ import Page from "@/components/Page";
 import Button from "@/components/Button";
 import PlayerCard from "@/components/Home/PlayerCard";
 import Loading from "@/components/Loading";
-import ClockCard from "@/components/Home/ClockCard";
 import PlayersTable from "@/components/Home/PlayersTable";
 import ClockManage from "@/components/Home/ClockManage";
+import History from "@/components/Home/History";
 
 export default function Home({ user, clocks, allUsers }) {
   const { setUser, setUsers } = useUser();
-  const { playerClocks, setPlayerClocks } = useClock();
+  const { setPlayerClocks } = useClock();
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,12 +49,12 @@ export default function Home({ user, clocks, allUsers }) {
   }, [allUsers, clocks, setPlayerClocks, setUser, setUsers, user]);
 
   const tabClassName =
-    "p-3 w-60 data-[state=active]:border-[#168ac5] data-[state=active]:border-b flex align-end justify-center gap-2";
+    "p-3 flex-1 data-[state=active]:border-[#168ac5] data-[state=active]:border-b flex align-end justify-center gap-2 md:w-60 md:flex-none";
 
   return (
     <Page pageTitle="Home" className="">
       {!isLoading && user && (
-        <div className="container mx-auto">
+        <div className="mx-auto md:container">
           <div className="mb-8 flex items-center gap-6">
             <h2 className="animate-fromTop text-2xl font-normal">
               Olá,
@@ -86,7 +83,7 @@ export default function Home({ user, clocks, allUsers }) {
             defaultValue="history"
           >
             {user.player.isAdmin && (
-              <Tabs.List className="mt-8 flex shrink-0 border-b border-[#2B2D42] text-lg">
+              <Tabs.List className="-mx-5 mt-8 flex w-screen shrink-0 border-b border-[#2B2D42] text-lg md:mx-0 md:w-auto">
                 <Tabs.Trigger value="history" className={tabClassName}>
                   <HouseLine className="flex self-center" />
                   Home
@@ -105,29 +102,7 @@ export default function Home({ user, clocks, allUsers }) {
             )}
 
             <Tabs.Content value="history" className="relative outline-none">
-              <div className="my-12 animate-fadeIn">
-                <h1 className="mb-2 text-start text-2xl">Meus pontos</h1>
-
-                <p className="col-span-full text-neutral-500">
-                  Aqui você vai poder visualizar e gerenciar seus pontos
-                  registrados no sistema
-                </p>
-
-                <Divider className="mb-0 w-full border-[#1e1e22]" />
-
-                {playerClocks.length ? (
-                  <div className="grid grid-cols-1 gap-4 py-8 xl:grid-cols-2">
-                    {playerClocks.map((clock) => (
-                      <ClockCard clock={clock} key={clock.hash} />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="mt-12 flex items-center gap-2 leading-tight  text-neutral-400">
-                    <TextSearch size={22} />
-                    Nenhum registro encontrado...
-                  </p>
-                )}
-              </div>
+              <History />
             </Tabs.Content>
 
             {user.player.isAdmin && (

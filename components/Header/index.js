@@ -11,8 +11,8 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className="border-b border-[#29292E] bg-[#1B1B1E] ">
-      <div className="lg:8/12 flex h-28 items-center justify-between px-5 md:container md:mx-auto md:w-10/12 md:px-0 ">
+    <header className=" border-b border-[#29292E] bg-[#1B1B1E] px-5">
+      <div className="mx-auto flex h-28 items-center justify-between md:container">
         <Link href="/" className="flex gap-2">
           <h1 className="leading-0 my-auto text-5xl leading-none">DPSKT</h1>
         </Link>
