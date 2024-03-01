@@ -26,7 +26,7 @@ export default function Login() {
         </p>
 
         <Button
-          className="hover:scale-1 w-full bg-[#6B52AE] transition-colors hover:bg-[#5059bb]"
+          className="hover:scale-1 w-full bg-[#5865f2] transition-colors hover:bg-[#5059bb]"
           onClick={() => signIn("discord")}
         >
           <IoLogoDiscord size={24} className="mr-3" />
