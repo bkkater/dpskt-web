@@ -34,7 +34,11 @@ export default function PlayerCard() {
   }
 
   return (
+<<<<<<< HEAD
     <div className="md:justify-normal bg-texture relative flex w-full animate-fromLeft flex-col gap-6 rounded border-2 border-[#29292E] bg-[#202024] bg-cover px-4 py-8 sm:flex-row sm:justify-between md:gap-16 md:px-8">
+=======
+    <div className="md:justify-normal relative flex w-full animate-fromLeft flex-col gap-6 rounded border-2 border-[#29292E] bg-[#202024] bg-[url('resources/bg-texture.png')] bg-cover px-4 py-8 sm:flex-row sm:justify-between md:gap-16 md:px-8">
+>>>>>>> 36bbe63f5679d0e17fd11abdd196c8e6770b6b49
       {user && (
         <>
           <Image
