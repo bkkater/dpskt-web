@@ -54,7 +54,7 @@ export default function Register() {
 
   return (
     <Page
-      className="flex items-center justify-center bg-custom"
+      className="bg-abstract flex items-center justify-center"
       pageTitle="Registro"
     >
       <div className="m-auto w-100 rounded border border-[#29292E] bg-[#202024] p-10">

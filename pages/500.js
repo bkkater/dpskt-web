@@ -2,7 +2,7 @@ import React from "react";
 
 function Custom500() {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-4 bg-custom">
+    <div className="bg-abstract flex h-full flex-col items-center justify-center gap-4">
       <div className="mx-auto flex items-center justify-center gap-4">
         <h1 className="border-r border-neutral-600 pr-4 text-5xl">500</h1>
 

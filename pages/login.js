@@ -11,7 +11,7 @@ import Logo from "@/resources/dpskt.png";
 
 export default function Login() {
   return (
-    <div className="flex h-full animate-fadeIn bg-custom">
+    <div className="bg-abstract flex h-full animate-fadeIn">
       <div className="m-auto flex w-80 animate-fadeIn flex-col gap-8 rounded border border-[#29292E] bg-[#202024] p-10">
         <Image
           src={Logo}
