@@ -82,7 +82,7 @@ function ClockManage() {
   }, [handleReportSubmit, handleSubmit, watch]);
 
   return (
-    <div className="mt-12 animate-fadeIn">
+    <div className="my-12 animate-fadeIn">
       <h1 className="mb-2 text-start text-2xl">Gerenciar pontos</h1>
 
       <p className="text-start text-neutral-500">
