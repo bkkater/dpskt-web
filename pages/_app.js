@@ -15,7 +15,6 @@ import "@/styles/globals.css";
 function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
-      {/* <QueryClientProvider> */}
       <UserProvider>
         <ClockProvider>
           <Head />
@@ -23,7 +22,6 @@ function App({ Component, pageProps: { session, ...pageProps } }) {
           <Component {...pageProps} />
         </ClockProvider>
       </UserProvider>
-      {/* </QueryClientProvider> */}
     </SessionProvider>
   );
 }
